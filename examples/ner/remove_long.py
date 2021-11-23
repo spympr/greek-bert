@@ -1,14 +1,14 @@
 def stats(path):
   print(path)
   with open(path,"r") as f:
-      lines = f.readlines()
+    lines = f.readlines()
+    print("Total lines:",len(lines))
 
   words = 0
   len_of_sentences = []
   for i,line in enumerate(lines):
-    if line != '\n':
-      words += 1
-    else:
+    words += 1
+    if line == '\n':
       len_of_sentences.append(words)
       words = 0  
 
@@ -27,6 +27,7 @@ def remove_long(path):
   words = []
   for i,word in enumerate(lines):
     words.append(word)
+    # print(word)
     if word == '\n':
       if len(words) <= 510: 
         with open(new_path,"a+") as f:
