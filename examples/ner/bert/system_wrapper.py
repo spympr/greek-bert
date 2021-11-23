@@ -19,16 +19,18 @@ class NERBERTSystemWrapper:
     def __init__(self, pretrained_bert_name, preprocessing_function, bert_like_special_tokens, model_params):
 
         self._pretrained_bert_name = pretrained_bert_name
-        print("MODEL:", pretrained_bert_name,"\n")
         bert_model = AutoModel.from_pretrained(pretrained_bert_name)
         model = NERBERTModel(bert_model, **model_params)
         self._preprocessing_function = preprocessing_function
         self._bert_like_special_tokens = bert_like_special_tokens
 
         if torch.cuda.is_available():
+            print("Running on cuda with model:", pretrained_bert_name)
             self._system = pw.System(model, last_activation=nn.Softmax(dim=-1), device=torch.device('cuda'))
         else:
+            print("Running on cpu with model:", pretrained_bert_name)
             self._system = pw.System(model, last_activation=nn.Softmax(dim=-1), device=torch.device('cpu'))
+
 
     def train(self,
               train_dataset_file,
