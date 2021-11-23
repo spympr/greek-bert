@@ -19,6 +19,7 @@ class NERBERTSystemWrapper:
     def __init__(self, pretrained_bert_name, preprocessing_function, bert_like_special_tokens, model_params):
 
         self._pretrained_bert_name = pretrained_bert_name
+        print("MODEL:", pretrained_bert_name,"\n")
         bert_model = AutoModel.from_pretrained(pretrained_bert_name)
         model = NERBERTModel(bert_model, **model_params)
         self._preprocessing_function = preprocessing_function

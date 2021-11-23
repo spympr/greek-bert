@@ -1,3 +1,4 @@
+from shutil import which
 import click
 import fasttext
 import numpy as np
@@ -66,20 +67,17 @@ def ner():
 def greek_bert():
     pass
 
-train_path = './NER_Dataset/train.txt'
-dev_path = './NER_Dataset/dev.txt'
-test_path = './NER_Dataset/test.txt'
+train_path,dev_path,test_path = './examples/ner/NER_Dataset/train.txt','./examples/ner/NER_Dataset/dev.txt','./examples/ner/NER_Dataset/test.txt'
 MODELS = ['alexaapo/greek_legal_bert_v2','nlpaueb/bert-base-greek-uncased-v1','alexaapo/greek_legal_bert_v1']
-MODEL = MODELS[0]
-on_gpu = False
 
-@greek_bert.command()
+@greek_bert.command()   
 @click.argument('train_dataset_file', type=click.File('r'), default=train_path)
 @click.argument('dev_dataset_file', type=click.File('r'), default=dev_path)
-@click.option('--multi-gpu', is_flag=on_gpu)
-def tune(train_dataset_file, dev_dataset_file, multi_gpu):
+@click.option('--multi-gpu', is_flag=True)
+@click.option('--which-model', type=int, required=True)
+def tune(train_dataset_file, dev_dataset_file, multi_gpu,which_model):
     results = NERBERTSystemWrapper.tune(
-        MODEL,
+        MODELS[which_model],
         strip_accents_and_lowercase,
         True,
         train_dataset_file,
@@ -99,13 +97,14 @@ def tune(train_dataset_file, dev_dataset_file, multi_gpu):
 @click.option('--lr', type=float, default=5e-05)
 @click.option('--dp', type=float, default=0.2)
 @click.option('--grad-accumulation-steps', type=int, default=2)
-@click.option('--multi-gpu', is_flag=on_gpu)
+@click.option('--multi-gpu', is_flag=True)
 @click.option('--silent', is_flag=True)
 @click.option('--seed', type=int, default=0)
+@click.option('--which-model', type=int, required=True)
 def run(train_dataset_file, dev_dataset_file, test_dataset_file, model_weights_save_path, batch_size, lr, dp,
-        grad_accumulation_steps, multi_gpu, silent, seed):
+        grad_accumulation_steps, multi_gpu, silent, seed, which_model):
     sw = NERBERTSystemWrapper(
-        MODEL,
+        MODELS[which_model],
         strip_accents_and_lowercase,
         True,
         {'dp': dp}

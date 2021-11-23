@@ -8,7 +8,7 @@ from .ner.__main__ import ner
 def cli():
     pass
 
-# cli.add_command(xnli)
+cli.add_command(xnli)
 # cli.add_command(ud)
 cli.add_command(ner)
 
