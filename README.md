@@ -128,4 +128,4 @@ text classification, including filtering spam and abusive content,
 machine learning in natural language processing, especially deep learning.
 
 The group is part of the Information Processing Laboratory of the Department of Informatics of the Athens University of Economics and Business.
-# GreekBert kkk
+# GreekBert
