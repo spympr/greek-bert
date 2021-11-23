@@ -67,7 +67,8 @@ def ner():
 def greek_bert():
     pass
 
-train_path,dev_path,test_path = './examples/ner/NER_Dataset/new_train.txt','./examples/ner/NER_Dataset/new_dev.txt','./examples/ner/NER_Dataset/new_test.txt'
+# train_path,dev_path,test_path = './examples/ner/NER_Dataset/new_train.txt','./examples/ner/NER_Dataset/new_dev.txt','./examples/ner/NER_Dataset/new_test.txt'
+train_path,dev_path,test_path = './examples/ner/NER_Dataset/train.txt','./examples/ner/NER_Dataset/dev.txt','./examples/ner/NER_Dataset/test.txt'
 MODELS = ['alexaapo/greek_legal_bert_v2','nlpaueb/bert-base-greek-uncased-v1','alexaapo/greek_legal_bert_v1']
 
 @greek_bert.command()   
