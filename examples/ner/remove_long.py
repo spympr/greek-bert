@@ -29,7 +29,7 @@ def remove_long(path):
     words.append(word)
     # print(word)
     if word == '\n':
-      if len(words) <= 250: 
+      if len(words) <= 200: 
         with open(new_path,"a+") as f:
           for w in words:
             f.write(w)
