@@ -8,12 +8,22 @@ from ..utils import parse_ner_dataset_file
 
 class NERBERTDataset(Dataset):
     I2L = [
-        'B-LOC',
+        'B-FACILITY',
+        'B-LOCATION-NAT',
+        'B-LOCATION-UNK',
+        'B-GPE',
+        'B-PERSON',
+        'B-PUBLIC-DOCS',
+        'B-LEG-REFS',
         'B-ORG',
-        'B-PER',
-        'I-LOC',
+        'I-FACILITY',
+        'I-LOCATION-NAT',
+        'I-LOCATION-UNK',
+        'I-GPE',
+        'I-PERSON',
+        'I-PUBLIC-DOCS',
+        'I-LEG-REFS',
         'I-ORG',
-        'I-PER',
         'O'
     ]
     L2I = {k: i for i, k in enumerate(I2L)}
