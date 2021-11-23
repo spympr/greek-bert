@@ -89,15 +89,13 @@ def tune(train_dataset_file, dev_dataset_file, multi_gpu,which_model):
 
 
 @greek_bert.command()
-# @click.argument('train_dataset_file', type=click.File('r'), default=train_path)
-# @click.argument('dev_dataset_file', type=click.File('r'), default=dev_path)
-# @click.argument('test_dataset_file', type=click.File('r'), default=test_path)
-
 # Little data
-@click.argument('train_dataset_file', type=click.File('r'), default='./examples/ner/NER_Dataset/train/FEK A 1 - 13.01.2017.txt')
-@click.argument('dev_dataset_file', type=click.File('r'), default='./examples/ner/NER_Dataset/dev/FEK A 2 - 02.01.2007.txt')
-@click.argument('test_dataset_file', type=click.File('r'), default='./examples/ner/NER_Dataset/test/FEK A 15 - 10.02.2017.txt')
-
+# @click.argument('train_dataset_file', type=click.File('r'), default='./examples/ner/NER_Dataset/train/FEK A 1 - 13.01.2017.txt')
+# @click.argument('dev_dataset_file', type=click.File('r'), default='./examples/ner/NER_Dataset/dev/FEK A 2 - 02.01.2007.txt')
+# @click.argument('test_dataset_file', type=click.File('r'), default='./examples/ner/NER_Dataset/test/FEK A 15 - 10.02.2017.txt')
+@click.argument('train_dataset_file', type=click.File('r'), default=train_path)
+@click.argument('dev_dataset_file', type=click.File('r'), default=dev_path)
+@click.argument('test_dataset_file', type=click.File('r'), default=test_path)
 @click.option('--model-weights-save-path', type=str, default=None)
 @click.option('--batch-size', type=int, default=8)
 @click.option('--lr', type=float, default=5e-05)
