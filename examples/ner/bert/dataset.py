@@ -43,6 +43,8 @@ class NERBERTDataset(Dataset):
                 bert_like_special_tokens,
                 preprocessing_function
             )
+            if len(tokenlist) > 510:
+                print(len(tokenlist))
             self.texts.append(cur_texts)
             self.text_lens.append(cur_text_lens)
             self.pred_masks.append(pred_mask)
