@@ -67,7 +67,6 @@ def ner():
 def greek_bert():
     pass
 
-# train_path,dev_path,test_path = './examples/ner/NER_Dataset/new_train.txt','./examples/ner/NER_Dataset/new_dev.txt','./examples/ner/NER_Dataset/new_test.txt'
 train_path,dev_path,test_path = './examples/ner/NER_Dataset/train.txt','./examples/ner/NER_Dataset/dev.txt','./examples/ner/NER_Dataset/test.txt'
 MODELS = ['alexaapo/greek_legal_bert_v2','nlpaueb/bert-base-greek-uncased-v1','alexaapo/greek_legal_bert_v1']
 
@@ -91,9 +90,6 @@ def tune(train_dataset_file, dev_dataset_file, multi_gpu,which_model):
 
 @greek_bert.command()
 # Little data
-# @click.argument('train_dataset_file', type=click.File('r'), default='./examples/ner/NER_Dataset/train/FEK A 1 - 13.01.2017.txt')
-# @click.argument('dev_dataset_file', type=click.File('r'), default='./examples/ner/NER_Dataset/dev/FEK A 2 - 02.01.2007.txt')
-# @click.argument('test_dataset_file', type=click.File('r'), default='./examples/ner/NER_Dataset/test/FEK A 15 - 10.02.2017.txt')
 @click.argument('train_dataset_file', type=click.File('r'), default=train_path)
 @click.argument('dev_dataset_file', type=click.File('r'), default=dev_path)
 @click.argument('test_dataset_file', type=click.File('r'), default=test_path)
