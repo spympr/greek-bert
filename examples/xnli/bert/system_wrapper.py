@@ -22,9 +22,11 @@ class XNLIBERTSystemWrapper:
         model = XNLIBERTModel(bert_model, **model_params)
 
         if torch.cuda.is_available():
-            self._system = pw.System(model, last_activation=nn.Softmax(dim=-1), device=torch.device('cuda'))
+            self._system = pw.System(model, last_activation=nn.Softmax(
+                dim=-1), device=torch.device('cuda'))
         else:
-            self._system = pw.System(model, last_activation=nn.Softmax(dim=-1), device=torch.device('cpu'))
+            self._system = pw.System(model, last_activation=nn.Softmax(
+                dim=-1), device=torch.device('cpu'))
 
     def train(self,
               train_dataset_file,
@@ -38,8 +40,10 @@ class XNLIBERTSystemWrapper:
               seed=0):
         torch.manual_seed(seed)
         tokenizer = AutoTokenizer.from_pretrained(self._pretrained_bert_name)
-        train_dataset = XNLIBERTDataset(train_dataset_file, tokenizer, preprocessing_function)
-        val_dataset = XNLIBERTDataset(val_dataset_file, tokenizer, preprocessing_function)
+        train_dataset = XNLIBERTDataset(
+            train_dataset_file, tokenizer, preprocessing_function)
+        val_dataset = XNLIBERTDataset(
+            val_dataset_file, tokenizer, preprocessing_function)
         self._train_impl(
             train_dataset,
             val_dataset,
@@ -75,7 +79,8 @@ class XNLIBERTSystemWrapper:
             collate_fn=partial(XNLIBERTDataset.collate_fn, pad_value=pad_value)
         )
 
-        loss_wrapper = pw.loss_wrappers.GenericPointWiseLossWrapper(nn.CrossEntropyLoss())
+        loss_wrapper = pw.loss_wrappers.GenericPointWiseLossWrapper(
+            nn.CrossEntropyLoss())
         optimizer = AdamW(self._system.model.parameters(), lr=lr)
 
         base_es_path = f'/tmp/{uuid.uuid4().hex[:30]}/'
@@ -88,7 +93,8 @@ class XNLIBERTSystemWrapper:
             optimizer,
             train_data_loader=train_dataloader,
             evaluation_data_loaders={'val': val_dataloader},
-            evaluators={'macro-f1': pw.evaluators.MultiClassF1Evaluator(average='macro')},
+            evaluators={
+                'macro-f1': pw.evaluators.MultiClassF1Evaluator(average='macro')},
             gradient_accumulation_steps=grad_accumulation_steps,
             callbacks=[
                 pw.training_callbacks.EarlyStoppingCriterionCallback(
@@ -103,7 +109,8 @@ class XNLIBERTSystemWrapper:
 
     def evaluate(self, eval_dataset_file, batch_size, run_on_multi_gpus, preprocessing_function, verbose=True):
         tokenizer = AutoTokenizer.from_pretrained(self._pretrained_bert_name)
-        eval_dataset = XNLIBERTDataset(eval_dataset_file, tokenizer, preprocessing_function)
+        eval_dataset = XNLIBERTDataset(
+            eval_dataset_file, tokenizer, preprocessing_function)
         return self._evaluate_impl(eval_dataset, batch_size, run_on_multi_gpus, tokenizer.pad_token_id, verbose)
 
     def _evaluate_impl(self, eval_dataset, batch_size, run_on_multi_gpus, pad_value, verbose=True):
@@ -144,14 +151,17 @@ class XNLIBERTSystemWrapper:
 
         tokenizer = AutoTokenizer.from_pretrained(pretrained_bert_name)
 
-        train_dataset = XNLIBERTDataset(train_dataset_file, tokenizer, preprocessing_function)
-        val_dataset = XNLIBERTDataset(val_dataset_file, tokenizer, preprocessing_function)
+        train_dataset = XNLIBERTDataset(
+            train_dataset_file, tokenizer, preprocessing_function)
+        val_dataset = XNLIBERTDataset(
+            val_dataset_file, tokenizer, preprocessing_function)
 
         results = []
         for i, (lr, dp, grad_accumulation_steps) in enumerate(params):
             print(f'{i + 1}/{len(params)}')
             torch.manual_seed(0)
-            current_system_wrapper = XNLIBERTSystemWrapper(pretrained_bert_name, {'dp': dp})
+            current_system_wrapper = XNLIBERTSystemWrapper(
+                pretrained_bert_name, {'dp': dp})
             current_system_wrapper._train_impl(
                 train_dataset,
                 val_dataset,
@@ -162,7 +172,14 @@ class XNLIBERTSystemWrapper:
                 tokenizer.pad_token_id
             )
 
+<<<<<<< HEAD
             current_results = current_system_wrapper._evaluate_impl(val_dataset, batch_size, run_on_multi_gpus, tokenizer.pad_token_id)
             results.append([current_results['macro-f1'].score, (lr, dp, grad_accumulation_steps)])
+=======
+            current_results = current_system_wrapper._evaluate_impl(
+                val_dataset, batch_size, run_on_multi_gpus)
+            results.append([current_results['macro-f1'].score,
+                           (lr, dp, grad_accumulation_steps)])
+>>>>>>> 855cf3b (minor)
 
         return results
