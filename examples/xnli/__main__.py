@@ -150,9 +150,6 @@ def tune(train_dataset_file, val_dataset_file, multi_gpu):
 
     print(max(results, key=lambda x: x[0]))
 
-# ssh alexspyros@195.134.71.120
-# Gr33kB21!
-# source Thesis/bin/activate
 
 @greek_bert.command()
 @click.argument('train_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.train.jsonl')
