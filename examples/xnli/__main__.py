@@ -131,17 +131,18 @@ def download_data(data_folder_path):
 def greek_bert():
     pass
 
+MODELS = ['alexaapo/greek_legal_bert_v2','nlpaueb/bert-base-greek-uncased-v1','alexaapo/greek_legal_bert_v1']
 
 @greek_bert.command()
 @click.argument('train_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.train.jsonl')
 # @click.argument('train_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.train40K.jsonl')
 @click.argument('val_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.dev.jsonl')
 @click.option('--multi-gpu', is_flag=True)
-def tune(train_dataset_file, val_dataset_file, multi_gpu):
+def tune(train_dataset_file, val_dataset_file, multi_gpu, which_model):
     from .bert.system_wrapper import XNLIBERTSystemWrapper
 
     results = XNLIBERTSystemWrapper.tune(
-        'nlpaueb/bert-base-greek-uncased-v1',
+        MODELS[which_model],
         train_dataset_file,
         val_dataset_file,
         multi_gpu,
@@ -163,12 +164,13 @@ def tune(train_dataset_file, val_dataset_file, multi_gpu):
 @click.option('--multi-gpu', is_flag=True)
 @click.option('--silent', is_flag=True)
 @click.option('--seed', type=int, default=0)
+@click.option('--which-model', type=int, required=True)
 def run(train_dataset_file, val_dataset_file, test_dataset_file, model_weights_save_path, batch_size, lr, dp,
-        grad_accumulation_steps, multi_gpu, silent, seed):
+        grad_accumulation_steps, multi_gpu, silent, seed, which_model):
     from .bert.system_wrapper import XNLIBERTSystemWrapper
 
     sw = XNLIBERTSystemWrapper(
-        'nlpaueb/bert-base-greek-uncased-v1', {'dp': dp})
+        MODELS[which_model], {'dp': dp})
 
     sw.train(train_dataset_file, val_dataset_file, lr, batch_size, grad_accumulation_steps, multi_gpu,
              strip_accents_and_lowercase, not silent, seed)
