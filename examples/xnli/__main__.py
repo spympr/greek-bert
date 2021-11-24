@@ -9,19 +9,21 @@ from zipfile import ZipFile
 
 from ..utils.text import strip_accents_and_lowercase
 
+
 @click.group()
 def xnli():
     pass
 
 
-# @xnli.command()
-# @click.argument('data_folder_path', type=str, default='data')
-# def download_data(data_folder_path):
-#     os.makedirs(data_folder_path, exist_ok=True)
-#     os.system(f'wget http://nlp.cs.aueb.gr/software_and_datasets/xnli_el.zip -P {data_folder_path}')
+@xnli.command()
+@click.argument('data_folder_path', type=str, default='data')
+def download_data(data_folder_path):
+    os.makedirs(data_folder_path, exist_ok=True)
+    os.system(
+        f'wget http://nlp.cs.aueb.gr/software_and_datasets/xnli_el.zip -P {data_folder_path}')
 
-#     with ZipFile(f'{data_folder_path}/xnli_el.zip', 'r') as z:
-#         z.extractall(data_folder_path)
+    with ZipFile(f'{data_folder_path}/xnli_el.zip', 'r') as z:
+        z.extractall(data_folder_path)
 
 
 # @xnli.group()
@@ -131,7 +133,8 @@ def greek_bert():
 
 
 @greek_bert.command()
-@click.argument('train_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.train40K.jsonl')
+@click.argument('train_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.train.jsonl')
+# @click.argument('train_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.train40K.jsonl')
 @click.argument('val_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.dev.jsonl')
 @click.option('--multi-gpu', is_flag=True)
 def tune(train_dataset_file, val_dataset_file, multi_gpu):
@@ -167,7 +170,8 @@ def run(train_dataset_file, val_dataset_file, test_dataset_file, model_weights_s
         grad_accumulation_steps, multi_gpu, silent, seed):
     from .bert.system_wrapper import XNLIBERTSystemWrapper
 
-    sw = XNLIBERTSystemWrapper('nlpaueb/bert-base-greek-uncased-v1', {'dp': dp})
+    sw = XNLIBERTSystemWrapper(
+        'nlpaueb/bert-base-greek-uncased-v1', {'dp': dp})
 
     sw.train(train_dataset_file, val_dataset_file, lr, batch_size, grad_accumulation_steps, multi_gpu,
              strip_accents_and_lowercase, not silent, seed)
