@@ -212,8 +212,8 @@ class NERBERTSystemWrapper:
                 lr,
                 batch_size,
                 grad_accumulation_steps,
-                tokenizer.pad_token_id,
-                run_on_multi_gpus
+                run_on_multi_gpus,
+                tokenizer.pad_token_id
             )
 
             current_results = current_system_wrapper._evaluate_impl(
