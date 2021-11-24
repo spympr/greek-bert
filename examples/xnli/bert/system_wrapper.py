@@ -22,10 +22,8 @@ class XNLIBERTSystemWrapper:
         model = XNLIBERTModel(bert_model, **model_params)
 
         if torch.cuda.is_available():
-            print("\nRunning on cuda with model:", pretrained_bert_name,"\n")
             self._system = pw.System(model, last_activation=nn.Softmax(dim=-1), device=torch.device('cuda'))
         else:
-            print("\nRunning on cpu with model:", pretrained_bert_name,"\n")
             self._system = pw.System(model, last_activation=nn.Softmax(dim=-1), device=torch.device('cpu'))
 
     def train(self,

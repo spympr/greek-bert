@@ -49,7 +49,8 @@ class XNLIBERTDataset(Dataset):
         input_zipped = list(zip(*batch_zipped[1]))
 
         ids = batch_zipped[0]
-        texts = torch.tensor(pad_to_max(input_zipped[0], pad_value=pad_value), dtype=torch.long)
+        texts = torch.tensor(pad_to_max(
+            input_zipped[0], pad_value=pad_value), dtype=torch.long)
         texts_len = torch.tensor(input_zipped[1], dtype=torch.int)
 
         target = torch.tensor(batch_zipped[2], dtype=torch.long)
@@ -65,10 +66,13 @@ class XNLIBERTDataset(Dataset):
     @staticmethod
     def process_example(ex, tokenizer, preprocessing_function):
         tokens = tokenizer.encode(
-            preprocessing_function(ex['prem']) if preprocessing_function else ex['prem'],
-            text_pair=preprocessing_function(ex['hypo']) if preprocessing_function else ex['hypo'],
+            preprocessing_function(
+                ex['prem']) if preprocessing_function else ex['prem'],
+            text_pair=preprocessing_function(
+                ex['hypo']) if preprocessing_function else ex['hypo'],
             add_special_tokens=True,
-            max_length=512
+            max_length=512,
+            # truncation=True
         )
 
         return tokens, len(tokens)

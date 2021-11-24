@@ -138,6 +138,7 @@ MODELS = ['alexaapo/greek_legal_bert_v2','nlpaueb/bert-base-greek-uncased-v1','a
 # @click.argument('train_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.train40K.jsonl')
 @click.argument('val_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.dev.jsonl')
 @click.option('--multi-gpu', is_flag=True)
+@click.option('--which-model', type=int, required=True)
 def tune(train_dataset_file, val_dataset_file, multi_gpu, which_model):
     from .bert.system_wrapper import XNLIBERTSystemWrapper
 
