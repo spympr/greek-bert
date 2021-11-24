@@ -43,6 +43,9 @@ class NERBERTDataset(Dataset):
                 bert_like_special_tokens,
                 preprocessing_function
             )
+            if len(cur_texts) > 512:
+                print(len(cur_texts), i)
+                continue
             self.texts.append(cur_texts)
             self.text_lens.append(cur_text_lens)
             self.pred_masks.append(pred_mask)
