@@ -479,7 +479,11 @@ def main():
         # Load model from that point with the best validation loss
         model.load_state_dict(torch.load('../OurNER/'+str(seed_val)+'.pt'))
     else:
-        model.load_state_dict(torch.load(only_eval_path))
+        bert_model = AutoModel.from_pretrained(MODEL)
+        model = NERBERTModel2(bert_model,dp_prob)
+        # model.load_state_dict(torch.load(only_eval_path))
+        model.load_state_dict(torch.load(only_eval_path),map_location=torch.device('cpu'))
+        model.to(device)
     
     print('Testing...')
     model.eval()
@@ -536,3 +540,17 @@ def main():
 
 if __name__ == "__main__":
   main()
+
+import pytorch_wrapper.functional as pwF
+
+class NERBERTModel2(nn.Module):
+
+    def __init__(self, bert_model, dp):
+        super(NERBERTModel, self).__init__()
+        self._bert_model = bert_model
+        self._dp = nn.Dropout(dp)
+        self._output_linear = nn.Linear(768, 17)
+
+    def forward(self, text, text_len):
+        attention_mask = pwF.create_mask_from_length(text_len, text.shape[1])
+        return self._output_linear(self._dp(self._bert_model(text, attention_mask=attention_mask)[0]))
