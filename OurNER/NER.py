@@ -135,6 +135,7 @@ def main():
     parser.add_argument('--little_data', default=False, action='store_true')
     parser.add_argument('--BertForToken', default=False, action='store_true')
     parser.add_argument('--label_all_tokens', default=False, action='store_true')
+    parser.add_argument('--only_eval_path', default='empty')
     args = parser.parse_args()
     #############################################################################################################
     MODELS = ['alexaapo/greek_legal_bert_v2','nlpaueb/bert-base-greek-uncased-v1','alexaapo/greek_legal_bert_v1']
@@ -149,6 +150,7 @@ def main():
     MAX_GRAD_NORM = args.MAX_GRAD_NORM
     seed_val = args.seed_val
     little_data = args.little_data
+    only_eval_path = args.only_eval_path
     #############################################################################################################
     print("Model:",MODEL)
     print("Learning Rate:",learning_rate)
@@ -159,6 +161,7 @@ def main():
     print("BertForToken:",BertForToken)
     print("label_all_tokens:",label_all_tokens)
     print("MAX_GRAD_NORM:",MAX_GRAD_NORM)
+    print("only_eval_path:",only_eval_path)
     #############################################################################################################
 
     ### Load Cuda GPU
