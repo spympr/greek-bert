@@ -89,7 +89,6 @@ def tune(train_dataset_file, dev_dataset_file, multi_gpu,which_model):
 
 
 @greek_bert.command()
-# Little data
 @click.argument('train_dataset_file', type=click.File('r'), default=train_path)
 @click.argument('dev_dataset_file', type=click.File('r'), default=dev_path)
 @click.argument('test_dataset_file', type=click.File('r'), default=test_path)

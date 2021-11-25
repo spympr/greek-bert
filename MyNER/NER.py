@@ -447,7 +447,7 @@ def main():
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             print("Saving the model with val loss = ","{:.2f}".format(best_val_loss))
-            torch.save(model.state_dict(),str(seed_val)+'.pt')
+            torch.save(model.state_dict(),'./MyNER/'+str(seed_val)+'.pt')
             
         # Record all statistics from this epoch.
         training_stats.append(
@@ -473,7 +473,7 @@ def main():
     t0 = time.time()
 
     # Load model from that point with the best validation loss
-    model.load_state_dict(torch.load(str(seed_val)+'.pt'))
+    model.load_state_dict(torch.load('./MyNER/'+str(seed_val)+'.pt'))
     model.eval()
 
     test_preds , test_labels = [], []
@@ -511,7 +511,7 @@ def main():
     print(set(final_labels)-set(final_predictions))
 
     ### Create Report
-    with open('report'+str(seed_val)+'.txt', 'w') as f:
+    with open('./MyNER/report'+str(seed_val)+'.txt', 'w') as f:
         f.write("Model:"+MODEL+"\n")
         f.write("Learning Rate:"+str(learning_rate)+"\n")
         f.write("Batch Size:"+str(batch_size)+"\n")
