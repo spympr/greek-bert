@@ -134,9 +134,9 @@ def greek_bert():
 MODELS = ['alexaapo/greek_legal_bert_v2','nlpaueb/bert-base-greek-uncased-v1','alexaapo/greek_legal_bert_v1']
 
 @greek_bert.command()
-@click.argument('train_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.train.jsonl')
-# @click.argument('train_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.train40K.jsonl')
-@click.argument('val_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.dev.jsonl')
+@click.argument('train_dataset_file', type=click.File('r'), default='../data/xnli_el/xnli.el.train.jsonl')
+# @click.argument('train_dataset_file', type=click.File('r'), default='../data/xnli_el/xnli.el.train40K.jsonl')
+@click.argument('val_dataset_file', type=click.File('r'), default='../data/xnli_el/xnli.el.dev.jsonl')
 @click.option('--multi-gpu', is_flag=True)
 @click.option('--which-model', type=int, required=True)
 def tune(train_dataset_file, val_dataset_file, multi_gpu, which_model):
@@ -154,9 +154,9 @@ def tune(train_dataset_file, val_dataset_file, multi_gpu, which_model):
 
 
 @greek_bert.command()
-@click.argument('train_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.train.jsonl')
-@click.argument('val_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.dev.jsonl')
-@click.argument('test_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.test.jsonl')
+@click.argument('train_dataset_file', type=click.File('r'), default='../data/xnli_el/xnli.el.train.jsonl')
+@click.argument('val_dataset_file', type=click.File('r'), default='../data/xnli_el/xnli.el.dev.jsonl')
+@click.argument('test_dataset_file', type=click.File('r'), default='../data/xnli_el/xnli.el.test.jsonl')
 @click.option('--model-weights-save-path', type=str, default=None)
 @click.option('--batch-size', type=int, default=4)
 @click.option('--lr', type=float, default=2e-05)
