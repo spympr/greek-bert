@@ -167,9 +167,9 @@ def main():
     if device == 'cuda':  print("GPU: {}".format(torch.cuda.get_device_name(0)))
 
     ### Retrieve Data
-    train_df = read_file('../MyNER/train.txt')
-    dev_df   = read_file('../MyNER/dev.txt')
-    test_df  = read_file('../MyNER/test.txt')
+    train_df = read_file('../OurNER/train.txt')
+    dev_df   = read_file('../OurNER/dev.txt')
+    test_df  = read_file('../OurNER/test.txt')
 
     ### Check Entities
     # print("For Train Data:\n")
@@ -447,7 +447,7 @@ def main():
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             print("Saving the model with val loss = ","{:.2f}".format(best_val_loss))
-            torch.save(model.state_dict(),'../MyNER/'+str(seed_val)+'.pt')
+            torch.save(model.state_dict(),'../OurNER/'+str(seed_val)+'.pt')
             
         # Record all statistics from this epoch.
         training_stats.append(
@@ -473,7 +473,7 @@ def main():
     t0 = time.time()
 
     # Load model from that point with the best validation loss
-    model.load_state_dict(torch.load('../MyNER/'+str(seed_val)+'.pt'))
+    model.load_state_dict(torch.load('../OurNER/'+str(seed_val)+'.pt'))
     model.eval()
 
     test_preds , test_labels = [], []
@@ -511,7 +511,7 @@ def main():
     print(set(final_labels)-set(final_predictions))
 
     ### Create Report
-    with open('../MyNER/report'+str(seed_val)+'.txt', 'w') as f:
+    with open('../OurNER/report'+str(seed_val)+'.txt', 'w') as f:
         f.write("Model:"+MODEL+"\n")
         f.write("Learning Rate:"+str(learning_rate)+"\n")
         f.write("Batch Size:"+str(batch_size)+"\n")
