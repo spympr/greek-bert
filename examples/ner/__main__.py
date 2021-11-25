@@ -117,7 +117,6 @@ def run(train_dataset_file, dev_dataset_file, test_dataset_file, model_weights_s
     if model_weights_save_path:
         sw.save_model_state(model_weights_save_path)
 
-
 # @ner.group()
 # def cased_multi_bert():
 #     pass
