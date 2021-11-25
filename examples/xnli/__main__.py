@@ -158,7 +158,7 @@ def tune(train_dataset_file, val_dataset_file, multi_gpu, which_model):
 @click.argument('val_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.dev.jsonl')
 @click.argument('test_dataset_file', type=click.File('r'), default='data/xnli_el/xnli.el.test.jsonl')
 @click.option('--model-weights-save-path', type=str, default=None)
-@click.option('--batch-size', type=int, default=8)
+@click.option('--batch-size', type=int, default=4)
 @click.option('--lr', type=float, default=2e-05)
 @click.option('--dp', type=float, default=0)
 @click.option('--grad-accumulation-steps', type=int, default=4)
