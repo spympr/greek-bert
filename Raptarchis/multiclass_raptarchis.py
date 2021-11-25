@@ -83,13 +83,13 @@ def main():
     #############################################################################################################
     parser = argparse.ArgumentParser(description='Raptarchis')
     parser.add_argument("--which_model", type=int, required=True, help="0 or 1 or 2")
-    parser.add_argument("--batch_size", type=int, default=8)
     parser.add_argument("--category", required=True, help="volume or chapter or subject")
     parser.add_argument("--epochs", type=int, required=True)
+    parser.add_argument("--batch_size", type=int, default=8)
+    parser.add_argument("--seed_val", type=int, required=True)
     parser.add_argument("--learning_rate", type=float, default=2e-05)
     parser.add_argument("--dp_prob", type=float, default=0.1)
     parser.add_argument("--max_len", type=int, default=512)
-    parser.add_argument("--seed_val", type=int, required=True)
     parser.add_argument('--reload', default=False, action='store_true')
     args = parser.parse_args()
     #############################################################################################################

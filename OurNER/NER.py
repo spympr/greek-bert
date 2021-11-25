@@ -481,6 +481,7 @@ def main():
     else:
         model.load_state_dict(torch.load(only_eval_path))
     
+    print('Testing...')
     model.eval()
     test_preds , test_labels = [], []
 
