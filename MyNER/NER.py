@@ -172,12 +172,12 @@ def main():
     test_df  = read_file('../MyNER/test.txt')
 
     ### Check Entities
-    print("For Train Data:\n")
-    check_entities(train_df)
-    print("For Dev Data:\n")
-    check_entities(dev_df)
-    print("For Test Data:\n")
-    check_entities(test_df)
+    # print("For Train Data:\n")
+    # check_entities(train_df)
+    # print("For Dev Data:\n")
+    # check_entities(dev_df)
+    # print("For Test Data:\n")
+    # check_entities(test_df)
     unique_labels = train_df.Label.unique()
 
     ### Create labels_to_ids
@@ -190,34 +190,34 @@ def main():
     dev_df = convert_to_sentences(dev_df,little_data)
     test_df = convert_to_sentences(test_df,little_data)
 
-    print("Total sentences in train:      ", len(train_df))
-    print("Max words in train sentences:  ", stats(train_df)[0])
-    print("Total words in train sentences:", stats(train_df)[1])
-    print("Mean words in train sentences: ", "{0:.2f}".format(statistics.mean(stats(train_df)[2])),"\n")
-    print("Total sentences in dev:        ", len(dev_df))
-    print("Max words in dev sentences:    ", stats(dev_df)[0])
-    print("Total words in dev sentences:  ", stats(dev_df)[1])
-    print("Mean words in dev sentences:   ", "{0:.2f}".format(statistics.mean(stats(dev_df)[2]),"\n"))
-    print("Total sentences in test:       ", len(test_df))
-    print("Max words in test sentences:   ", stats(test_df)[0])
-    print("Total words in test sentences: ", stats(test_df)[1])
-    print("Mean words in test sentences:  ", "{0:.2f}".format(statistics.mean(stats(test_df)[2])))
+    # print("Total sentences in train:      ", len(train_df))
+    # print("Max words in train sentences:  ", stats(train_df)[0])
+    # print("Total words in train sentences:", stats(train_df)[1])
+    # print("Mean words in train sentences: ", "{0:.2f}".format(statistics.mean(stats(train_df)[2])),"\n")
+    # print("Total sentences in dev:        ", len(dev_df))
+    # print("Max words in dev sentences:    ", stats(dev_df)[0])
+    # print("Total words in dev sentences:  ", stats(dev_df)[1])
+    # print("Mean words in dev sentences:   ", "{0:.2f}".format(statistics.mean(stats(dev_df)[2]),"\n"))
+    # print("Total sentences in test:       ", len(test_df))
+    # print("Max words in test sentences:   ", stats(test_df)[0])
+    # print("Total words in test sentences: ", stats(test_df)[1])
+    # print("Mean words in test sentences:  ", "{0:.2f}".format(statistics.mean(stats(test_df)[2])))
 
-    print(sorted(stats(train_df)[2],reverse=True)[0:20])
-    print(sorted(stats(dev_df)[2],reverse=True)[0:20])
-    print(sorted(stats(test_df)[2],reverse=True)[0:20])
+    # print(sorted(stats(train_df)[2],reverse=True)[0:20])
+    # print(sorted(stats(dev_df)[2],reverse=True)[0:20])
+    # print(sorted(stats(test_df)[2],reverse=True)[0:20])
 
-    thresholds = [32,64,128,256]
-    for t in thresholds:
-        print("For threshold", t)
-        len_ = len(sorted(stats(train_df)[2]))
-        sum_ = sum(i < t for i in sorted(stats(train_df)[2]))
-        print("For train set:","{0:.3f}".format(sum_/len_))
-        print("For dev   set:","{0:.3f}".format(sum_/len_))
-        print("For test  set:","{0:.3f}".format(sum_/len_))
-        print()
+    # thresholds = [32,64,128,256]
+    # for t in thresholds:
+    #     print("For threshold", t)
+    #     len_ = len(sorted(stats(train_df)[2]))
+    #     sum_ = sum(i < t for i in sorted(stats(train_df)[2]))
+    #     print("For train set:","{0:.3f}".format(sum_/len_))
+    #     print("For dev   set:","{0:.3f}".format(sum_/len_))
+    #     print("For test  set:","{0:.3f}".format(sum_/len_))
+    #     print()
 
-    print(train_df.iloc[200:215])
+    # print(train_df.iloc[200:215])
 
     ### Load Tokenizer & Model
     if BertForToken:
@@ -234,17 +234,17 @@ def main():
     test_tokenized_set = tokenize_and_align_labels(test_df,tokenizer,labels_to_ids,max_len,label_all_tokens)
 
     ### Cross Checking
-    print(type(train_tokenized_set),"\n")
+    # print(type(train_tokenized_set),"\n")
 
-    print(len(train_tokenized_set["ids"]))
-    print(len(dev_tokenized_set["ids"]))
-    print(len(test_tokenized_set["ids"]),"\n")
+    # print(len(train_tokenized_set["ids"]))
+    # print(len(dev_tokenized_set["ids"]))
+    # print(len(test_tokenized_set["ids"]),"\n")
 
-    print(len(train_tokenized_set["ids"][0]),"\n")
+    # print(len(train_tokenized_set["ids"][0]),"\n")
         
-    print(train_tokenized_set["ids"][0])
-    print(train_tokenized_set["mask"][0])
-    print(train_tokenized_set["tags"][0])
+    # print(train_tokenized_set["ids"][0])
+    # print(train_tokenized_set["mask"][0])
+    # print(train_tokenized_set["tags"][0])
 
     ### Create DataLoaders
     train_set = CustomDataset(train_tokenized_set)
@@ -259,68 +259,68 @@ def main():
     print("Dev   Batches:",len(dev_dataloader), " = ",len(dev_tokenized_set["ids"]), "/", batch_size)
     print("Test  Batches:",len(test_dataloader), " = ",len(test_tokenized_set["ids"]), "/", batch_size)
 
-    ### Inspect train example
-    if little_data: random_example = 0
-    else:   random_example = 212
+    # ### Inspect train example
+    # if little_data: random_example = 0
+    # else:   random_example = 212
 
-    for z,batch in enumerate(train_dataloader):
-        if z == random_example:
-            b_input_ids,b_input_mask,b_labels = batch['ids'],batch['mask'],batch['tags']
-            print(b_input_ids[0])
-            print(b_input_mask[0])
-            print(b_labels[0])
-            break
+    # for z,batch in enumerate(train_dataloader):
+    #     if z == random_example:
+    #         b_input_ids,b_input_mask,b_labels = batch['ids'],batch['mask'],batch['tags']
+    #         print(b_input_ids[0])
+    #         print(b_input_mask[0])
+    #         print(b_labels[0])
+    #         break
 
-    for token, label in zip(tokenizer.convert_ids_to_tokens(train_set[random_example]["ids"]), train_set[random_example]["tags"]):
-        print('{0:10}  {1}'.format(token, label))
+    # for token, label in zip(tokenizer.convert_ids_to_tokens(train_set[random_example]["ids"]), train_set[random_example]["tags"]):
+    #     print('{0:10}  {1}'.format(token, label))
 
     ### Sanity Check before Training
-    input_ids,attention_mask,labels = train_set[random_example]["ids"].unsqueeze(0).to(device),train_set[random_example]["mask"].unsqueeze(0).to(device),train_set[random_example]["tags"].unsqueeze(0).to(device)
-    logits = model(input_ids,attention_mask)[0]
-    print(input_ids.shape,attention_mask.shape,labels.shape)
-    print(logits.shape,"= (batch_size, sequence_length, num_labels)")
+    # input_ids,attention_mask,labels = train_set[random_example]["ids"].unsqueeze(0).to(device),train_set[random_example]["mask"].unsqueeze(0).to(device),train_set[random_example]["tags"].unsqueeze(0).to(device)
+    # logits = model(input_ids,attention_mask)[0]
+    # print(input_ids.shape,attention_mask.shape,labels.shape)
+    # print(logits.shape,"= (batch_size, sequence_length, num_labels)")
 
     ### Check Performance
     # Load model and tokenizer
-    tokenizer_greek = AutoTokenizer.from_pretrained(MODEL)
-    lm_model_greek = AutoModelForMaskedLM.from_pretrained(MODEL)
+    # tokenizer_greek = AutoTokenizer.from_pretrained(MODEL)
+    # lm_model_greek = AutoModelForMaskedLM.from_pretrained(MODEL)
 
-    def tt():
-        print("================================================================================================================================================")
+    # def tt():
+    #     print("================================================================================================================================================")
 
-    tt()
-    # # ================ EXAMPLE 1 ================
-    text_1 = 'Ο [MASK] προσανατολισμός της νέας φαρμακευτικής πολιτικής διατρέχει το σύνολο των επί μέρους διατάξεων του νόμου.'
-    # text_1 = 'Ο κοινωνικός προσανατολισμός της νέας φαρμακευτικής πολιτικής διατρέχει το σύνολο των επί μέρους διατάξεων του νόμου.'
-    input_ids = tokenizer_greek.encode(text_1)
-    print("\n",tokenizer_greek.convert_ids_to_tokens(input_ids))
-    outputs = lm_model_greek(torch.tensor([input_ids]))[0]
-    for _,i in enumerate(torch.topk(outputs[0,2],3)[1]):
-        print("Model's Answer ",_,": ",tokenizer_greek.convert_ids_to_tokens(i.item()),sep='')
-    print("\nCorrect Answer:", "κοινωνικός")
+    # tt()
+    # # # ================ EXAMPLE 1 ================
+    # text_1 = 'Ο [MASK] προσανατολισμός της νέας φαρμακευτικής πολιτικής διατρέχει το σύνολο των επί μέρους διατάξεων του νόμου.'
+    # # text_1 = 'Ο κοινωνικός προσανατολισμός της νέας φαρμακευτικής πολιτικής διατρέχει το σύνολο των επί μέρους διατάξεων του νόμου.'
+    # input_ids = tokenizer_greek.encode(text_1)
+    # print("\n",tokenizer_greek.convert_ids_to_tokens(input_ids))
+    # outputs = lm_model_greek(torch.tensor([input_ids]))[0]
+    # for _,i in enumerate(torch.topk(outputs[0,2],3)[1]):
+    #     print("Model's Answer ",_,": ",tokenizer_greek.convert_ids_to_tokens(i.item()),sep='')
+    # print("\nCorrect Answer:", "κοινωνικός")
 
-    tt()
-    # # ================ EXAMPLE 2 ================
-    text_2 = 'Η [MASK] ενός ταμείου που διευκολύνει την κίνηση του πετρελαίου σ’ όλη τη χώρα.'
-    # text_2 = 'H δημιουργία ενός ταμείου που διευκολύνει την κίνηση του πετρελαίου σ’ όλη τη χώρα.'
-    input_ids = tokenizer_greek.encode(text_2)
-    print("\n",tokenizer_greek.convert_ids_to_tokens(input_ids))
-    outputs = lm_model_greek(torch.tensor([input_ids]))[0]
-    for _,i in enumerate(torch.topk(outputs[0,2],3)[1]):
-        print("Model's Answer ",_,": ",tokenizer_greek.convert_ids_to_tokens(i.item()),sep='')
-    print("\nCorrect Answer:", "δημιουργια")
+    # tt()
+    # # # ================ EXAMPLE 2 ================
+    # text_2 = 'Η [MASK] ενός ταμείου που διευκολύνει την κίνηση του πετρελαίου σ’ όλη τη χώρα.'
+    # # text_2 = 'H δημιουργία ενός ταμείου που διευκολύνει την κίνηση του πετρελαίου σ’ όλη τη χώρα.'
+    # input_ids = tokenizer_greek.encode(text_2)
+    # print("\n",tokenizer_greek.convert_ids_to_tokens(input_ids))
+    # outputs = lm_model_greek(torch.tensor([input_ids]))[0]
+    # for _,i in enumerate(torch.topk(outputs[0,2],3)[1]):
+    #     print("Model's Answer ",_,": ",tokenizer_greek.convert_ids_to_tokens(i.item()),sep='')
+    # print("\nCorrect Answer:", "δημιουργια")
 
-    tt()
-    # # ================ EXAMPLE 3 ================
-    text_3 = 'Οι κανόνες [MASK] των δεδομένων προσωπικού χαρακτήρα διέπουν σημαντικές πτυχές του τρόπου αλληλεπίδρασης των επιγραμμικών υπηρεσιών με τους χρήστες, ωστόσο, ισχύουν επίσης και άλλοι κανόνες.'
-    # text_3 = 'Οι κανόνες προστασίας των δεδομένων προσωπικού χαρακτήρα διέπουν σημαντικές πτυχές του τρόπου αλληλεπίδρασης των επιγραμμικών υπηρεσιών με τους χρήστες, ωστόσο, ισχύουν επίσης και άλλοι κανόνες.'
-    input_ids = tokenizer_greek.encode(text_3)
-    print("\n",tokenizer_greek.convert_ids_to_tokens(input_ids))
-    outputs = lm_model_greek(torch.tensor([input_ids]))[0]
-    for _,i in enumerate(torch.topk(outputs[0,3],3)[1]):
-        print("Model's Answer ",_,": ",tokenizer_greek.convert_ids_to_tokens(i.item()),sep='')
-    print("\nCorrect Answer:", "προστασίας")
-    tt()
+    # tt()
+    # # # ================ EXAMPLE 3 ================
+    # text_3 = 'Οι κανόνες [MASK] των δεδομένων προσωπικού χαρακτήρα διέπουν σημαντικές πτυχές του τρόπου αλληλεπίδρασης των επιγραμμικών υπηρεσιών με τους χρήστες, ωστόσο, ισχύουν επίσης και άλλοι κανόνες.'
+    # # text_3 = 'Οι κανόνες προστασίας των δεδομένων προσωπικού χαρακτήρα διέπουν σημαντικές πτυχές του τρόπου αλληλεπίδρασης των επιγραμμικών υπηρεσιών με τους χρήστες, ωστόσο, ισχύουν επίσης και άλλοι κανόνες.'
+    # input_ids = tokenizer_greek.encode(text_3)
+    # print("\n",tokenizer_greek.convert_ids_to_tokens(input_ids))
+    # outputs = lm_model_greek(torch.tensor([input_ids]))[0]
+    # for _,i in enumerate(torch.topk(outputs[0,3],3)[1]):
+    #     print("Model's Answer ",_,": ",tokenizer_greek.convert_ids_to_tokens(i.item()),sep='')
+    # print("\nCorrect Answer:", "προστασίας")
+    # tt()
    
     random.seed(seed_val)
     np.random.seed(seed_val)
