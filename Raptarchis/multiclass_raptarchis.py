@@ -15,7 +15,7 @@ def init_best_loss(RELOAD,seed_val):
     best_ = float(np.inf)
 
     if RELOAD:
-        with open('./Raptarchis/train_stats_'+str(seed_val)+'.txt', 'r') as f: 
+        with open('../Raptarchis/train_stats_'+str(seed_val)+'.txt', 'r') as f: 
             li = f.readlines()
         f.close()
         for elem in li:
@@ -173,7 +173,7 @@ def main():
     model = RaptarchisBERT(AutoModel.from_pretrained(MODEL),len(unique_labels),dp_prob).to(device)
 
     if RELOAD:
-        model.load_state_dict(torch.load('./Raptarchis/'+str(seed_val)+'.pt'))
+        model.load_state_dict(torch.load('../Raptarchis/'+str(seed_val)+'.pt'))
         model.to(device)
 
     loss_fn = nn.CrossEntropyLoss().to(device)
@@ -409,7 +409,7 @@ def main():
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             print("Saving the model with val loss = ","{:.2f}".format(best_val_loss))
-            torch.save(model.state_dict(),str(seed_val)+'.pt')
+            torch.save(model.state_dict(),'../Raptarchis/'+str(seed_val)+'.pt')
 
         # Record all statistics from this epoch.
         training_stats.append(
@@ -429,12 +429,12 @@ def main():
     ### Save Load Stats from all epochs
 
     # Save stats
-    with open('./Raptarchis/train_stats_'+str(seed_val)+'.txt', 'a') as f:
+    with open('../Raptarchis/train_stats_'+str(seed_val)+'.txt', 'a') as f:
         f.write(str(training_stats)+"\n")
         f.close()
 
     all_training_stats, my_lists = [], []
-    with open('./Raptarchis/train_stats_'+str(seed_val)+'.txt', 'r') as f: 
+    with open('../Raptarchis/train_stats_'+str(seed_val)+'.txt', 'r') as f: 
         for li in f.readlines():
             my_lists.append(ast.literal_eval(li))
         f.close()
@@ -450,7 +450,7 @@ def main():
                 all_training_stats.append(elem)
 
     # Save stats
-    with open('./Raptarchis/train_stats_'+str(seed_val)+'.txt', 'w') as f:
+    with open('../Raptarchis/train_stats_'+str(seed_val)+'.txt', 'w') as f:
         f.write(str(all_training_stats)+"\n")
         f.close()
 
@@ -463,7 +463,7 @@ def main():
     ### Test Model
     t0 = time.time()
 
-    model.load_state_dict(torch.load('./Raptarchis/'+str(seed_val)+'.pt'))
+    model.load_state_dict(torch.load('../Raptarchis/'+str(seed_val)+'.pt'))
     model.eval()
 
     test_preds , test_labels = [], []
@@ -498,7 +498,7 @@ def main():
     print(set(final_labels)-set(final_predictions))
 
     ### Create Report
-    with open('report'+str(seed_val)+'.txt', 'w') as f:
+    with open('../Raptarchis/report'+str(seed_val)+'.txt', 'w') as f:
         f.write("Model:"+MODEL+"\n")
         f.write("Learning Rate:"+str(learning_rate)+"\n")
         f.write("Batch Size:"+str(batch_size)+"\n")
