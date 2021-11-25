@@ -172,7 +172,9 @@ class XNLIBERTSystemWrapper:
                 tokenizer.pad_token_id
             )
 
-            current_results = current_system_wrapper._evaluate_impl(val_dataset, batch_size, run_on_multi_gpus, tokenizer.pad_token_id)
-            results.append([current_results['macro-f1'].score, (lr, dp, grad_accumulation_steps)])
+            current_results = current_system_wrapper._evaluate_impl(
+                val_dataset, batch_size, run_on_multi_gpus, tokenizer.pad_token_id)
+            results.append([current_results['macro-f1'].score,
+                           (lr, dp, grad_accumulation_steps)])
 
         return results
