@@ -145,8 +145,8 @@ class XNLIBERTSystemWrapper:
     def tune(pretrained_bert_name, train_dataset_file, val_dataset_file, run_on_multi_gpus, preprocessing_function):
         lrs = [5e-5, 3e-5, 2e-5]
         dp = [0, 0.1, 0.2]
-        grad_accumulation_steps = [4, 8]
-        batch_size = 4
+        grad_accumulation_steps = [2, 4]
+        batch_size = 8
         params = list(product(lrs, dp, grad_accumulation_steps))
 
         tokenizer = AutoTokenizer.from_pretrained(pretrained_bert_name)
