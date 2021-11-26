@@ -173,17 +173,17 @@ class NERBERTSystemWrapper:
              train_dataset_file,
              val_dataset_file,
              run_on_multi_gpus):
-        # lrs = [5e-5, 3e-5, 2e-5]
-        # dp = [0, 0.1, 0.2]
-        # grad_accumulation_steps = [2, 4]
-        # batch_size = 8
-        # params = list(product(lrs, dp, grad_accumulation_steps))
+        lrs = [5e-5, 3e-5, 2e-5]
+        dp = [0, 0.1, 0.2]
+        grad_accumulation_steps = [2, 4]
+        batch_size = 8
+        params = list(product(lrs, dp, grad_accumulation_steps))
 
         lrs = [5e-5, 3e-5, 2e-5]
-        dp = [0, 0.1]
-        grad_accumulation_steps = 1
-        batch_size = [8,10,12]
-        params = list(product(lrs, dp, batch_size))
+        dp = [0, 0.1, 0.2]
+        grad_accumulation_steps = [4, 8]
+        batch_size = 4
+        params = list(product(lrs, dp, grad_accumulation_steps))
 
         tokenizer = AutoTokenizer.from_pretrained(pretrained_bert_name)
 
@@ -202,8 +202,8 @@ class NERBERTSystemWrapper:
         )
 
         results = []
-        # for i, (lr, dp, grad_accumulation_steps) in enumerate(params):
-        for i, (lr, dp, batch_size) in enumerate(params):
+        for i, (lr, dp, grad_accumulation_steps) in enumerate(params):
+        # for i, (lr, dp, batch_size) in enumerate(params):
             print(f'{i + 1}/{len(params)}')
             torch.manual_seed(0)
             current_system_wrapper = NERBERTSystemWrapper(
