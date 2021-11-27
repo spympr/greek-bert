@@ -44,7 +44,7 @@ class NERBERTDataset(Dataset):
                 preprocessing_function
             )
             ## Check if we have more than 512 words in a sentence
-            if len(cur_texts) > 512:
+            if cur_text_lens > 512:
                 print(len(cur_texts), i, tokenlist[0])
                 continue
             self.texts.append(cur_texts)
