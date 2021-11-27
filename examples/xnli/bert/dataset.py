@@ -14,6 +14,7 @@ class XNLIBERTDataset(Dataset):
         'contradictory': 1,
         'entailment': 2
     }
+    I2L = {k: i for i, k in enumerate(L2I)}
 
     def __init__(self, file, tokenizer, preprocessing_function):
         self.ids = []

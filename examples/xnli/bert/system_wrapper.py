@@ -12,6 +12,7 @@ from functools import partial
 from .model import XNLIBERTModel
 from .dataset import XNLIBERTDataset
 
+from ...utils.evaluators import MultiClassF1EvaluatorMaskedTokenEntityLabelingEvaluator
 
 class XNLIBERTSystemWrapper:
 
@@ -127,7 +128,8 @@ class XNLIBERTSystemWrapper:
             'acc': pw.evaluators.MultiClassAccuracyEvaluator(),
             'macro-prec': pw.evaluators.MultiClassPrecisionEvaluator(average='macro'),
             'macro-rec': pw.evaluators.MultiClassRecallEvaluator(average='macro'),
-            'macro-f1': pw.evaluators.MultiClassF1Evaluator(average='macro'),
+            'macro-f1': MultiClassF1EvaluatorMaskedTokenEntityLabelingEvaluator(eval_dataset.I2L),
+            # 'macro-f1': pw.evaluators.MultiClassF1Evaluator(average='macro'),
             'micro-prec': pw.evaluators.MultiClassPrecisionEvaluator(average='micro'),
             'micro-rec': pw.evaluators.MultiClassRecallEvaluator(average='micro'),
             'micro-f1': pw.evaluators.MultiClassF1Evaluator(average='micro')
