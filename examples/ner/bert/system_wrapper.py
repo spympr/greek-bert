@@ -181,6 +181,7 @@ class NERBERTSystemWrapper:
 
         tokenizer = AutoTokenizer.from_pretrained(pretrained_bert_name)
 
+        print("On Train\n")
         train_dataset = NERBERTDataset(
             train_dataset_file,
             tokenizer,
@@ -188,6 +189,7 @@ class NERBERTSystemWrapper:
             preprocessing_function
         )
 
+        print("On Val\n")
         val_dataset = NERBERTDataset(
             val_dataset_file,
             tokenizer,
