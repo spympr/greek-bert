@@ -237,6 +237,7 @@ class MultiClassF1EvaluatorMaskedTokenEntityLabelingEvaluator \
     def calculate(self):
         if self._average == 'macro':
             per_class_score = {}
+            print()
             for l in self._labels:
                 pr_denominator = self._tp[l] + self._fp[l]
                 pr_score = (self._tp[l] / pr_denominator) if pr_denominator > 0 else 0
@@ -245,6 +246,7 @@ class MultiClassF1EvaluatorMaskedTokenEntityLabelingEvaluator \
                 denominator = pr_score + rec_score
                 per_class_score[l] = (2 * pr_score * rec_score) / denominator if denominator > 0 else 0
                 print(f'{l}, {pr_score}, {rec_score}, {per_class_score[l]}')
+            print()
             score = sum(per_class_score[l] for l in per_class_score) / len(per_class_score)
         else:
             global_tp = sum(self._tp[l] for l in self._tp)
