@@ -257,3 +257,49 @@ class MultiClassF1EvaluatorMaskedTokenEntityLabelingEvaluator \
             score = (2 * pr_score * rec_score) / denominator if denominator > 0 else 0
 
         return GenericEvaluatorResults(score, self._average + '-f1', '%5.4f', is_max_better=True)
+
+class MultiClassF1EvaluatorMaskedTokenEntityLabelingEvaluatorVerbose \
+            (AbstractMaskedTokenEntityLabelingEvaluator):
+
+    def __init__(self, i2l, average='macro', batch_input_key='input', model_output_key=None, batch_target_key='target',
+                 batch_mask_key='mask'):
+        super(
+            MultiClassF1EvaluatorMaskedTokenEntityLabelingEvaluator,
+            self
+        ).__init__(
+            i2l,
+            batch_input_key,
+            model_output_key,
+            batch_target_key,
+            batch_mask_key,
+        )
+
+        self._average = average
+
+    def calculate(self):
+        if self._average == 'macro':
+            per_class_score = {}
+            for l in self._labels:
+                pr_denominator = self._tp[l] + self._fp[l]
+                pr_score = (self._tp[l] / pr_denominator) if pr_denominator > 0 else 0
+                rec_denominator = self._tp[l] + self._fn[l]
+                rec_score = (self._tp[l] / rec_denominator) if rec_denominator > 0 else 0
+                denominator = pr_score + rec_score
+                per_class_score[l] = (2 * pr_score * rec_score) / denominator if denominator > 0 else 0
+                ###############
+                # new ugly line
+                print(f'{l}, {pr_score}, {rec_score}, {per_class_score[l]}')
+                ###############
+            score = sum(per_class_score[l] for l in per_class_score) / len(per_class_score)
+        else:
+            global_tp = sum(self._tp[l] for l in self._tp)
+            global_fn = sum(self._fn[l] for l in self._fn)
+            global_fp = sum(self._fp[l] for l in self._fp)
+            pr_denominator = global_tp + global_fp
+            pr_score = (global_tp / pr_denominator) if pr_denominator > 0 else 0
+            rec_denominator = global_tp + global_fn
+            rec_score = (global_tp / rec_denominator) if rec_denominator > 0 else 0
+            denominator = pr_score + rec_score
+            score = (2 * pr_score * rec_score) / denominator if denominator > 0 else 0
+
+        return GenericEvaluatorResults(score, self._average + '-f1', '%5.4f', is_max_better=True)
