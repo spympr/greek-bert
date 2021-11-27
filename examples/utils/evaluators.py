@@ -264,7 +264,7 @@ class MultiClassF1EvaluatorMaskedTokenEntityLabelingEvaluatorVerbose \
     def __init__(self, i2l, average='macro', batch_input_key='input', model_output_key=None, batch_target_key='target',
                  batch_mask_key='mask'):
         super(
-            MultiClassF1EvaluatorMaskedTokenEntityLabelingEvaluator,
+            MultiClassF1EvaluatorMaskedTokenEntityLabelingEvaluatorVerbose,
             self
         ).__init__(
             i2l,
