@@ -155,7 +155,9 @@ class XNLIBERTSystemWrapper:
             eval_dataloader)
 
         total_predictions = []
-        total_predictions.append(predictions['outputs'].argmax(dim=1, keepdim=True).squeeze(1).cpu().detach().numpy())
+        for i in predictions['outputs']:
+            total_predictions.append(i.argmax(
+                dim=1, keepdim=True).squeeze(1).cpu().detach().numpy())
 
         print((total_predictions))
         print(len(total_predictions))
