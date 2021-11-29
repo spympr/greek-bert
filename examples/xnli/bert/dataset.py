@@ -72,9 +72,9 @@ class XNLIBERTDataset(Dataset):
             text_pair=preprocessing_function(
                 ex['hypo']) if preprocessing_function else ex['hypo'],
             add_special_tokens=True,
-            max_length=64,
-            # max_length=512,
-            # truncation=True
+            # max_length=64,
+            max_length=512,
+            truncation=True
         )
 
         return tokens, len(tokens)
