@@ -146,7 +146,7 @@ class XNLIBERTSystemWrapper:
         print(len(true_labels[0]))
 
         predictions = self._system.predict(
-            eval_dataloader)
+            eval_dataloader, batch_id_key=eval_dataloader.batch_sampler)
         print(type(predictions))
         # print(predictions)
         print(type(predictions['outputs'][0]))
