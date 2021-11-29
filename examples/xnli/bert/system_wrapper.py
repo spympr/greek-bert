@@ -148,13 +148,14 @@ class XNLIBERTSystemWrapper:
 
         true_labels = [item for sublist in true_labels for item in sublist]
         print(len(true_labels))
-        print((true_labels))
+        # print((true_labels))
         # print(len(true_labels[0]))
 
         predictions = self._system.predict(
             eval_dataloader)
 
-        predictions.append(predictions.argmax(dim = 1, keepdim = True).squeeze(1).cpu().detach().numpy())
+        predictions = (predictions.argmax(
+            dim=1, keepdim=True).squeeze(1).cpu().detach().numpy())
 
         print(type(predictions))
         # print(predictions)
