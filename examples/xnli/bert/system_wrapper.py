@@ -153,6 +153,9 @@ class XNLIBERTSystemWrapper:
 
         predictions = self._system.predict(
             eval_dataloader)
+
+        predictions.append(predictions.argmax(dim = 1, keepdim = True).squeeze(1).cpu().detach().numpy())
+
         print(type(predictions))
         # print(predictions)
         # print(type(predictions['outputs'][0]))
