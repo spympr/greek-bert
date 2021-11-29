@@ -144,8 +144,8 @@ class XNLIBERTSystemWrapper:
             eval_dataloader)
         print(type(predictions))
         # print(predictions)
-        print(type(predictions[0]))
-        print((predictions[0]))
+        print(type(predictions['outputs'][0]))
+        print((predictions['outputs'][0]))
         # print(predictions)
 
         target_names = ['neutral', 'contradiction', 'entailment']
