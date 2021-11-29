@@ -156,7 +156,7 @@ class XNLIBERTSystemWrapper:
             predictions['batch_id_key'], predictions['outputs'], target_names=target_names))
 
         if run_on_multi_gpus:
-                return self._system.evaluate_on_multi_gpus(eval_dataloader, evaluators, verbose=verbose)
+            return self._system.evaluate_on_multi_gpus(eval_dataloader, evaluators, verbose=verbose)
         else:
             return self._system.evaluate(eval_dataloader, evaluators, verbose=verbose)
 
