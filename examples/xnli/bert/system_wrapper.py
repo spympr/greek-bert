@@ -145,6 +145,7 @@ class XNLIBERTSystemWrapper:
         print(type(predictions))
         # print(predictions)
         print(type(predictions['outputs'][0]))
+        print(len(predictions['outputs']))
         print((predictions['outputs'][0]))
         # print(predictions)
 
