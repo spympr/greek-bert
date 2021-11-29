@@ -2,6 +2,7 @@ import pytorch_wrapper as pw
 import torch
 import os
 import uuid
+import numpy as np
 
 from torch import nn
 from torch.utils.data import DataLoader, SequentialSampler, RandomSampler
@@ -157,7 +158,7 @@ class XNLIBERTSystemWrapper:
         total_predictions = []
         for i in predictions['outputs']:
             total_predictions.append(
-                argmax(i, axis=1).squeeze(1).cuda().detach().numpy())
+                np.argmax(i, axis=1).squeeze(1).cuda().detach().numpy())
 
         print((total_predictions))
         print(len(total_predictions))
