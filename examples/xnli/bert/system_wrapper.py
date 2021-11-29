@@ -145,8 +145,8 @@ class XNLIBERTSystemWrapper:
         print(len(true_labels))
         print(len(true_labels[0]))
 
-        for i in true_labels:
-            print(true_labels[i])
+        for j in true_labels:
+            print(i)
         predictions = self._system.predict(
             eval_dataloader)
         print(type(predictions))
