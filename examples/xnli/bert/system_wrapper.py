@@ -158,7 +158,7 @@ class XNLIBERTSystemWrapper:
         total_predictions = []
         for i in predictions['outputs']:
             total_predictions.append(
-                np.argmax(i, axis=1).squeeze(1).cuda().detach().numpy())
+                np.argmax(i, axis=0).squeeze(1).cuda().detach().numpy())
 
         print((total_predictions))
         print(len(total_predictions))
