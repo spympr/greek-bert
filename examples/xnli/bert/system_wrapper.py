@@ -153,7 +153,9 @@ class XNLIBERTSystemWrapper:
         print(len(predictions['outputs']))
         print(len(predictions['outputs'][0]))
         print((predictions['outputs'][0]))
-        print(predictions)
+        # print(predictions)
+        for i in predictions:
+            print(len(i))
 
         target_names = ['neutral', 'contradiction', 'entailment']
         print(classification_report(
