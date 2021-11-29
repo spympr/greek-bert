@@ -154,22 +154,23 @@ class XNLIBERTSystemWrapper:
         predictions = self._system.predict(
             eval_dataloader)
 
-        predictions = (predictions.argmax(
-            dim=1, keepdim=True).squeeze(1).cpu().detach().numpy())
+        total_predictions = []
+        total_predictions.append(predictions['outputs'].argmax(dim=1, keepdim=True).squeeze(1).cpu().detach().numpy())
 
-        print(type(predictions))
+        print((total_predictions))
+        print(len(total_predictions))
         # print(predictions)
         # print(type(predictions['outputs'][0]))
-        print(len(predictions['outputs']))
-        print(len(predictions['outputs'][0]))
-        print((predictions['outputs'][0]))
+        # print(len(predictions['outputs']))
+        # print(len(predictions['outputs'][0]))
+        # print((predictions['outputs'][0]))
         # print(predictions)
         # for i in predictions['outputs']:
         # print((i))
 
         target_names = ['neutral', 'contradiction', 'entailment']
         print(classification_report(
-            true_labels, predictions['outputs'], target_names=target_names))
+            true_labels, total_predictions, target_names=target_names))
 
         if run_on_multi_gpus:
                 return self._system.evaluate_on_multi_gpus(eval_dataloader, evaluators, verbose=verbose)
