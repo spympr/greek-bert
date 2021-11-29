@@ -8,7 +8,6 @@ from torch.utils.data import DataLoader, SequentialSampler, RandomSampler
 from itertools import product
 from transformers import AutoTokenizer, AutoModel, AdamW
 from functools import partial
-import numpy as np
 
 from .model import XNLIBERTModel
 from .dataset import XNLIBERTDataset
@@ -158,7 +157,7 @@ class XNLIBERTSystemWrapper:
         total_predictions = []
         for i in predictions['outputs']:
             total_predictions.append(
-                np.argmax(predictions, axis=1).squeeze(1).cuda().detach().numpy())
+                argmax(i, axis=1).squeeze(1).cuda().detach().numpy())
 
         print((total_predictions))
         print(len(total_predictions))
