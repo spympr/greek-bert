@@ -140,20 +140,20 @@ class XNLIBERTSystemWrapper:
         # print(type(eval_dataloader))
         true_labels = []
         for batch_idx, samples in enumerate(eval_dataloader):
-            # print(len(samples['target']))
+            print(len(samples['target']))
             true_labels.append(samples['target'].tolist())
         print(len(true_labels))
         print(len(true_labels[0]))
 
         predictions = self._system.predict(
-            eval_dataloader, batch_id_key=eval_dataloader.batch_sampler)
+            eval_dataloader)
         print(type(predictions))
         # print(predictions)
-        print(type(predictions['outputs'][0]))
+        # print(type(predictions['outputs'][0]))
         print(len(predictions['outputs']))
         print(len(predictions['outputs'][0]))
         print((predictions['outputs'][0]))
-        # print(predictions)
+        print(predictions)
 
         target_names = ['neutral', 'contradiction', 'entailment']
         print(classification_report(
