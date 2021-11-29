@@ -136,11 +136,15 @@ class XNLIBERTSystemWrapper:
             'micro-f1': pw.evaluators.MultiClassF1Evaluator(average='micro')
         }
 
-        print(eval_dataloader)
-        print(type(eval_dataloader))
+        # print(eval_dataloader)
+        # print(type(eval_dataloader))
+        true_labels = []
         for batch_idx, samples in enumerate(eval_dataloader):
             print(len(samples['target']))
-        
+            true_labels.add(samples['target'])
+        print(len(true_labels))
+        print(len(true_labels[0]))
+
         predictions = self._system.predict(
             eval_dataloader)
         print(type(predictions))
