@@ -8,6 +8,7 @@ from torch.utils.data import DataLoader, SequentialSampler, RandomSampler
 from itertools import product
 from transformers import AutoTokenizer, AutoModel, AdamW
 from functools import partial
+import numpy as np
 
 from .model import XNLIBERTModel
 from .dataset import XNLIBERTDataset
