@@ -2,6 +2,7 @@ import pytorch_wrapper as pw
 import torch
 import os
 import uuid
+import numpy as np
 
 from torch import nn
 from torch.utils.data import DataLoader, SequentialSampler, RandomSampler
@@ -136,24 +137,43 @@ class XNLIBERTSystemWrapper:
             'micro-f1': pw.evaluators.MultiClassF1Evaluator(average='micro')
         }
 
-        print(eval_dataloader)
-        print(type(eval_dataloader))
+        # print(eval_dataloader)
+        # print(type(eval_dataloader))
+        true_labels = []
         for batch_idx, samples in enumerate(eval_dataloader):
-            print(len(samples['target']))
-        
+            # print((samples['target']))
+            true_labels.append(samples['target'].tolist())
+
+        # for j in true_labels:
+        # print(j)
+
+        true_labels = [item for sublist in true_labels for item in sublist]
+        print(len(true_labels))
+        # print((true_labels))
+        # print(len(true_labels[0]))
+
         predictions = self._system.predict(
             eval_dataloader)
-        print(type(predictions))
+
+        total_predictions = []
+        for i in predictions['outputs']:
+            print(i)
+            total_predictions.append(i.argmax(dim = 1, keepdim = True).squeeze(1).cuda().detach().numpy())
+
+        print((total_predictions))
+        print(len(total_predictions))
         # print(predictions)
-        print(type(predictions['outputs'][0]))
-        print(len(predictions['outputs']))
-        print(len(predictions['outputs'][0]))
-        print((predictions['outputs'][0]))
+        # print(type(predictions['outputs'][0]))
+        # print(len(predictions['outputs']))
+        # print(len(predictions['outputs'][0]))
+        # print((predictions['outputs'][0]))
         # print(predictions)
+        # for i in predictions['outputs']:
+        # print((i))
 
         target_names = ['neutral', 'contradiction', 'entailment']
         print(classification_report(
-            predictions['batch_id_key'], predictions['outputs'], target_names=target_names))
+            true_labels, total_predictions, target_names=target_names))
 
         if run_on_multi_gpus:
             return self._system.evaluate_on_multi_gpus(eval_dataloader, evaluators, verbose=verbose)
