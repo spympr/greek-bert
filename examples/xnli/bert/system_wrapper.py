@@ -141,7 +141,7 @@ class XNLIBERTSystemWrapper:
         true_labels = []
         for batch_idx, samples in enumerate(eval_dataloader):
             print(len(samples['target']))
-            true_labels.add(samples['target'])
+            true_labels.append(samples['target'])
         print(len(true_labels))
         print(len(true_labels[0]))
 
