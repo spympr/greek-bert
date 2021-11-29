@@ -11,8 +11,10 @@ from functools import partial
 
 from .model import XNLIBERTModel
 from .dataset import XNLIBERTDataset
+from sklearn.metrics import classification_report
 
 from ...utils.evaluators import MultiClassF1EvaluatorMaskedTokenEntityLabelingEvaluator
+
 
 class XNLIBERTSystemWrapper:
 
@@ -133,6 +135,12 @@ class XNLIBERTSystemWrapper:
             'micro-rec': pw.evaluators.MultiClassRecallEvaluator(average='micro'),
             'micro-f1': pw.evaluators.MultiClassF1Evaluator(average='micro')
         }
+
+        predictions = self._system.predict(eval_dataloader)
+
+        target_names = ['neutral', 'contradiction', 'entailment']
+        print(classification_report(
+            predictions['batch_id_key'], predictions['outputs'], target_names=target_names))
 
         if run_on_multi_gpus:
                 return self._system.evaluate_on_multi_gpus(eval_dataloader, evaluators, verbose=verbose)
