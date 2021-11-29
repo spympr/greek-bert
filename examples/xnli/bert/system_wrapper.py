@@ -142,11 +142,15 @@ class XNLIBERTSystemWrapper:
         for batch_idx, samples in enumerate(eval_dataloader):
             # print((samples['target']))
             true_labels.append(samples['target'].tolist())
-        print(len(true_labels))
-        print(len(true_labels[0]))
 
-        for j in true_labels:
-            print(j)
+        # for j in true_labels:
+        # print(j)
+
+        true_labels = [item for sublist in true_labels for item in sublist]
+        print(len(true_labels))
+        print((true_labels))
+        # print(len(true_labels[0]))
+
         predictions = self._system.predict(
             eval_dataloader)
         print(type(predictions))
