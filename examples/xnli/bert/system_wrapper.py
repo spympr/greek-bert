@@ -139,8 +139,8 @@ class XNLIBERTSystemWrapper:
         print(eval_dataloader)
         print(type(eval_dataloader))
         predictions = self._system.predict(eval_dataloader)
-        print(type(predictions))
-        print(predictions.keys())
+        # print(type(predictions))
+        # print(predictions.keys())
 
         target_names = ['neutral', 'contradiction', 'entailment']
         print(classification_report(
