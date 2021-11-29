@@ -145,8 +145,8 @@ class XNLIBERTSystemWrapper:
         print(len(true_labels))
         print(len(true_labels[0]))
 
-        for j in true_labels:
-            print(j)
+        # for j in true_labels:
+            # print(j)
         predictions = self._system.predict(
             eval_dataloader)
         print(type(predictions))
@@ -156,8 +156,8 @@ class XNLIBERTSystemWrapper:
         print(len(predictions['outputs'][0]))
         print((predictions['outputs'][0]))
         # print(predictions)
-        for i in predictions['outputs']:
-            print((i))
+        # for i in predictions['outputs']:
+            # print((i))
 
         target_names = ['neutral', 'contradiction', 'entailment']
         print(classification_report(
