@@ -140,7 +140,7 @@ class XNLIBERTSystemWrapper:
         # print(type(eval_dataloader))
         true_labels = []
         for batch_idx, samples in enumerate(eval_dataloader):
-            print(len(samples['target']))
+            # print(len(samples['target']))
             true_labels.append(samples['target'].tolist())
         print(len(true_labels))
         print(len(true_labels[0]))
@@ -157,7 +157,7 @@ class XNLIBERTSystemWrapper:
 
         target_names = ['neutral', 'contradiction', 'entailment']
         print(classification_report(
-            predictions['batch_id_key'], predictions['outputs'], target_names=target_names))
+            true_labels, predictions['outputs'], target_names=target_names))
 
         if run_on_multi_gpus:
                 return self._system.evaluate_on_multi_gpus(eval_dataloader, evaluators, verbose=verbose)
