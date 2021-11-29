@@ -157,9 +157,10 @@ class XNLIBERTSystemWrapper:
 
         total_predictions = []
         for i in predictions['outputs']:
+            i = torch.FloatTensor(i)
             print(i)
             total_predictions.append(
-                torch.FloatTensor(i).argmax(dim=1, keepdim=True).squeeze(1).cuda().detach().numpy())
+                i.argmax(dim=1, keepdim=True).squeeze(1).cuda().detach().numpy())
 
         print((total_predictions))
         print(len(total_predictions))
