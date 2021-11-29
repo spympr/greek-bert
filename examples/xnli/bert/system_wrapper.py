@@ -148,7 +148,7 @@ class XNLIBERTSystemWrapper:
         # print(j)
 
         true_labels = [item for sublist in true_labels for item in sublist]
-        print(len(true_labels))
+        # print(len(true_labels))
         # print((true_labels))
         # print(len(true_labels[0]))
 
@@ -162,8 +162,8 @@ class XNLIBERTSystemWrapper:
             # print(i.argmax().numpy())
             total_predictions.append(i.argmax().numpy())
 
-        print((total_predictions))
-        print(len(total_predictions))
+        # print((total_predictions))
+        # print(len(total_predictions))
         # print(predictions)
         # print(type(predictions['outputs'][0]))
         # print(len(predictions['outputs']))
