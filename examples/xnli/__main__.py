@@ -173,8 +173,8 @@ def run(train_dataset_file, val_dataset_file, test_dataset_file, model_weights_s
     sw = XNLIBERTSystemWrapper(
         MODELS[which_model], {'dp': dp})
 
-    sw.train(train_dataset_file, val_dataset_file, lr, batch_size, grad_accumulation_steps, multi_gpu,
-             strip_accents_and_lowercase, not silent, seed)
+    # sw.train(train_dataset_file, val_dataset_file, lr, batch_size, grad_accumulation_steps, multi_gpu,
+             # strip_accents_and_lowercase, not silent, seed)
     results = sw.evaluate(test_dataset_file, batch_size, multi_gpu,
                           strip_accents_and_lowercase, not silent)
 
