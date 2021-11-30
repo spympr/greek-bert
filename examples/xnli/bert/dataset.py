@@ -74,7 +74,7 @@ class XNLIBERTDataset(Dataset):
             add_special_tokens=True,
             # max_length=64,
             max_length=512,
-            truncation=True
+            # truncation=True
         )
 
         return tokens, len(tokens)
