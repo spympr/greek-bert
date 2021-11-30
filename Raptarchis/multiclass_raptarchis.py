@@ -218,27 +218,27 @@ def main():
     # print("Test  Batches:",len(test_dataloader), " = ",len(test_tokenized_set["ids"]), " /", batch_size)
 
     ### Inspect train example
-    random_example = 212
+    # random_example = 212
 
-    for z,batch in enumerate(train_dataloader):
-        if z == random_example:
-            b_input_ids,b_input_mask,b_labels = batch['ids'],batch['mask'],batch['tags']
-            print(b_input_ids[0])
-            print(b_input_mask[0])
-            print(b_labels[0])
-            break
+    # for z,batch in enumerate(train_dataloader):
+    #     if z == random_example:
+    #         b_input_ids,b_input_mask,b_labels = batch['ids'],batch['mask'],batch['tags']
+    #         print(b_input_ids[0])
+    #         print(b_input_mask[0])
+    #         print(b_labels[0])
+    #         break
 
     ### Sanity Check before Training
-    input_ids,attention_mask,labels = train_set[random_example]["ids"].unsqueeze(0).to(device),train_set[random_example]["mask"].unsqueeze(0).to(device),train_set[random_example]["tags"].unsqueeze(0).to(device)
-    logits = model(input_ids,attention_mask)
+    # input_ids,attention_mask,labels = train_set[random_example]["ids"].unsqueeze(0).to(device),train_set[random_example]["mask"].unsqueeze(0).to(device),train_set[random_example]["tags"].unsqueeze(0).to(device)
+    # logits = model(input_ids,attention_mask)
 
     # print(input_ids.shape,attention_mask.shape,labels.shape)
     # print(logits.shape,"= (batch_size, sequence_length, num_labels)")
 
     ### Check Performance
     # Load model and tokenizer
-    tokenizer_greek = AutoTokenizer.from_pretrained(MODEL)
-    lm_model_greek = AutoModelForMaskedLM.from_pretrained(MODEL)
+    # tokenizer_greek = AutoTokenizer.from_pretrained(MODEL)
+    # lm_model_greek = AutoModelForMaskedLM.from_pretrained(MODEL)
    
     # tt()
     # # ================ EXAMPLE 1 ================
