@@ -164,7 +164,7 @@ def tune(train_dataset_file, val_dataset_file, multi_gpu, which_model):
 @click.option('--grad-accumulation-steps', type=int, default=4)
 @click.option('--multi-gpu', is_flag=True)
 @click.option('--silent', is_flag=True)
-@click.option('--seed', type=int, default=110)
+@click.option('--seed', type=int, default=1100)
 @click.option('--which-model', type=int, required=True)
 def run(train_dataset_file, val_dataset_file, test_dataset_file, model_weights_save_path, batch_size, lr, dp,
         grad_accumulation_steps, multi_gpu, silent, seed, which_model):
