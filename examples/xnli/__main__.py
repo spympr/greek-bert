@@ -160,7 +160,7 @@ def tune(train_dataset_file, val_dataset_file, multi_gpu, which_model):
 @click.option('--model-weights-save-path', type=str, default=None)
 @click.option('--batch-size', type=int, default=8)
 @click.option('--lr', type=float, default=2e-05)
-@click.option('--dp', type=float, default=0.2)
+@click.option('--dp', type=float, default=0)
 @click.option('--grad-accumulation-steps', type=int, default=2)
 @click.option('--multi-gpu', is_flag=True)
 @click.option('--silent', is_flag=True)
