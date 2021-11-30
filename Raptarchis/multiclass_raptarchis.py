@@ -8,6 +8,9 @@ from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import accuracy_score
 from transformers import AutoTokenizer,AutoModel,AutoModelForMaskedLM
 
+def tt():
+    print("================================================================================================================================================")
+
 def format_time(elapsed):
     return str(datetime.timedelta(seconds=int(round((elapsed)))))
 
@@ -140,9 +143,9 @@ def main():
     else:
         print("ERROR!")
 
-    print("Number of train labels of tags: {}".format(len(train_labels)))
-    print("Number of dev labels of tags: {}".format(len(dev_labels)))
-    print("Number of test labels of tags: {}".format(len(test_labels)),"\n")
+    # print("Number of train labels of tags: {}".format(len(train_labels)))
+    # print("Number of dev labels of tags: {}".format(len(dev_labels)))
+    # print("Number of test labels of tags: {}".format(len(test_labels)),"\n")
     unique_labels = train_df[category].unique()
 
     ### Create labels_to_ids
@@ -150,24 +153,24 @@ def main():
     ids_to_labels = {v: k for v, k in enumerate(train_labels)}
     labels_to_ids
 
-    print("Total sentences in train:      ", len(train_df))
-    print("Max words in train sentences:  ", stats(train_df)[0])
-    print("Total words in train sentences:", stats(train_df)[1])
-    print("Mean words in train sentences: ", statistics.mean(stats(train_df)[2]),"\n")
-    print("Total sentences in dev:        ", len(dev_df))
-    print("Max words in dev sentences:    ", stats(dev_df)[0])
-    print("Total words in dev sentences:  ", stats(dev_df)[1])
-    print("Mean words in dev sentences:   ", statistics.mean(stats(dev_df)[2]),"\n")
-    print("Total sentences in test:       ", len(test_df))
-    print("Max words in test sentences:   ", stats(test_df)[0])
-    print("Total words in test sentences: ", stats(test_df)[1])
-    print("Mean words in test sentences:  ", statistics.mean(stats(test_df)[2]))
+    # print("Total sentences in train:      ", len(train_df))
+    # print("Max words in train sentences:  ", stats(train_df)[0])
+    # print("Total words in train sentences:", stats(train_df)[1])
+    # print("Mean words in train sentences: ", statistics.mean(stats(train_df)[2]),"\n")
+    # print("Total sentences in dev:        ", len(dev_df))
+    # print("Max words in dev sentences:    ", stats(dev_df)[0])
+    # print("Total words in dev sentences:  ", stats(dev_df)[1])
+    # print("Mean words in dev sentences:   ", statistics.mean(stats(dev_df)[2]),"\n")
+    # print("Total sentences in test:       ", len(test_df))
+    # print("Max words in test sentences:   ", stats(test_df)[0])
+    # print("Total words in test sentences: ", stats(test_df)[1])
+    # print("Mean words in test sentences:  ", statistics.mean(stats(test_df)[2]))
 
-    print(sorted(stats(train_df)[2],reverse=True)[0:20])
-    print(sorted(stats(dev_df)[2],reverse=True)[0:20])
-    print(sorted(stats(test_df)[2],reverse=True)[0:20])
+    # print(sorted(stats(train_df)[2],reverse=True)[0:20])
+    # print(sorted(stats(dev_df)[2],reverse=True)[0:20])
+    # print(sorted(stats(test_df)[2],reverse=True)[0:20])
 
-    print(train_df.iloc[200:215])
+    # print(train_df.iloc[200:215])
 
     ### Load Tokenizer & Model 
     model = RaptarchisBERT(AutoModel.from_pretrained(MODEL),len(unique_labels),dp_prob).to(device)
@@ -184,22 +187,22 @@ def main():
     dev_tokenized_set = tokenize(dev_df,category,tokenizer,labels_to_ids,max_len)
     test_tokenized_set = tokenize(test_df,category,tokenizer,labels_to_ids,max_len)
 
-    print(len(list(train_tokenized_set['tags'])))
-    print(len(list(train_tokenized_set['mask'])))
-    print(len(list(train_tokenized_set['ids'])))
+    # print(len(list(train_tokenized_set['tags'])))
+    # print(len(list(train_tokenized_set['mask'])))
+    # print(len(list(train_tokenized_set['ids'])))
 
     ### Cross Checking
-    print(type(train_tokenized_set),"\n")
+    # print(type(train_tokenized_set),"\n")
 
-    print(len(train_tokenized_set["ids"]))
-    print(len(dev_tokenized_set["ids"]))
-    print(len(test_tokenized_set["ids"]),"\n")
+    # print(len(train_tokenized_set["ids"]))
+    # print(len(dev_tokenized_set["ids"]))
+    # print(len(test_tokenized_set["ids"]),"\n")
 
-    print(len(train_tokenized_set["ids"][0]),"\n")
+    # print(len(train_tokenized_set["ids"][0]),"\n")
         
-    print(train_tokenized_set["ids"][0])
-    print(train_tokenized_set["mask"][0])
-    print(train_tokenized_set["tags"][0])
+    # print(train_tokenized_set["ids"][0])
+    # print(train_tokenized_set["mask"][0])
+    # print(train_tokenized_set["tags"][0])
 
     ### Create DataLoaders
     train_set = CustomDataset(train_tokenized_set)
@@ -210,69 +213,66 @@ def main():
     dev_dataloader   = DataLoader(dev_set,  **{'batch_size': batch_size,'shuffle': True,'num_workers': 0})
     test_dataloader  = DataLoader(test_set, **{'batch_size': batch_size,'shuffle': True,'num_workers': 0})
 
-    print("Train Batches:",len(train_dataloader), "  =",len(train_tokenized_set["ids"]), "/", batch_size)
-    print("Dev   Batches:",len(dev_dataloader), " = ",len(dev_tokenized_set["ids"]), " /", batch_size)
-    print("Test  Batches:",len(test_dataloader), " = ",len(test_tokenized_set["ids"]), " /", batch_size)
+    # print("Train Batches:",len(train_dataloader), "  =",len(train_tokenized_set["ids"]), "/", batch_size)
+    # print("Dev   Batches:",len(dev_dataloader), " = ",len(dev_tokenized_set["ids"]), " /", batch_size)
+    # print("Test  Batches:",len(test_dataloader), " = ",len(test_tokenized_set["ids"]), " /", batch_size)
 
     ### Inspect train example
-    random_example = 212
+    # random_example = 212
 
-    for z,batch in enumerate(train_dataloader):
-        if z == random_example:
-            b_input_ids,b_input_mask,b_labels = batch['ids'],batch['mask'],batch['tags']
-            print(b_input_ids[0])
-            print(b_input_mask[0])
-            print(b_labels[0])
-            break
+    # for z,batch in enumerate(train_dataloader):
+    #     if z == random_example:
+    #         b_input_ids,b_input_mask,b_labels = batch['ids'],batch['mask'],batch['tags']
+    #         print(b_input_ids[0])
+    #         print(b_input_mask[0])
+    #         print(b_labels[0])
+    #         break
 
     ### Sanity Check before Training
-    input_ids,attention_mask,labels = train_set[random_example]["ids"].unsqueeze(0).to(device),train_set[random_example]["mask"].unsqueeze(0).to(device),train_set[random_example]["tags"].unsqueeze(0).to(device)
-    logits = model(input_ids,attention_mask)
+    # input_ids,attention_mask,labels = train_set[random_example]["ids"].unsqueeze(0).to(device),train_set[random_example]["mask"].unsqueeze(0).to(device),train_set[random_example]["tags"].unsqueeze(0).to(device)
+    # logits = model(input_ids,attention_mask)
 
-    print(input_ids.shape,attention_mask.shape,labels.shape)
-    print(logits.shape,"= (batch_size, sequence_length, num_labels)")
+    # print(input_ids.shape,attention_mask.shape,labels.shape)
+    # print(logits.shape,"= (batch_size, sequence_length, num_labels)")
 
     ### Check Performance
     # Load model and tokenizer
-    tokenizer_greek = AutoTokenizer.from_pretrained(MODEL)
-    lm_model_greek = AutoModelForMaskedLM.from_pretrained(MODEL)
+    # tokenizer_greek = AutoTokenizer.from_pretrained(MODEL)
+    # lm_model_greek = AutoModelForMaskedLM.from_pretrained(MODEL)
+   
+    # tt()
+    # # ================ EXAMPLE 1 ================
+    # text_1 = 'Ο [MASK] προσανατολισμός της νέας φαρμακευτικής πολιτικής διατρέχει το σύνολο των επί μέρους διατάξεων του νόμου.'
+    # # text_1 = 'Ο κοινωνικός προσανατολισμός της νέας φαρμακευτικής πολιτικής διατρέχει το σύνολο των επί μέρους διατάξεων του νόμου.'
+    # input_ids = tokenizer_greek.encode(text_1)
+    # print("\n",tokenizer_greek.convert_ids_to_tokens(input_ids))
+    # outputs = lm_model_greek(torch.tensor([input_ids]))[0]
+    # for _,i in enumerate(torch.topk(outputs[0,2],3)[1]):
+    #     print("Model's Answer ",_,": ",tokenizer_greek.convert_ids_to_tokens(i.item()),sep='')
+    # print("\nCorrect Answer:", "κοινωνικός")
 
-    def tt():
-        print("================================================================================================================================================")
+    # tt()
+    # # ================ EXAMPLE 2 ================
+    # text_2 = 'Η [MASK] ενός ταμείου που διευκολύνει την κίνηση του πετρελαίου σ’ όλη τη χώρα.'
+    # # text_2 = 'H δημιουργία ενός ταμείου που διευκολύνει την κίνηση του πετρελαίου σ’ όλη τη χώρα.'
+    # input_ids = tokenizer_greek.encode(text_2)
+    # print("\n",tokenizer_greek.convert_ids_to_tokens(input_ids))
+    # outputs = lm_model_greek(torch.tensor([input_ids]))[0]
+    # for _,i in enumerate(torch.topk(outputs[0,2],3)[1]):
+    #     print("Model's Answer ",_,": ",tokenizer_greek.convert_ids_to_tokens(i.item()),sep='')
+    # print("\nCorrect Answer:", "δημιουργια")
 
-    tt()
-    # ================ EXAMPLE 1 ================
-    text_1 = 'Ο [MASK] προσανατολισμός της νέας φαρμακευτικής πολιτικής διατρέχει το σύνολο των επί μέρους διατάξεων του νόμου.'
-    # text_1 = 'Ο κοινωνικός προσανατολισμός της νέας φαρμακευτικής πολιτικής διατρέχει το σύνολο των επί μέρους διατάξεων του νόμου.'
-    input_ids = tokenizer_greek.encode(text_1)
-    print("\n",tokenizer_greek.convert_ids_to_tokens(input_ids))
-    outputs = lm_model_greek(torch.tensor([input_ids]))[0]
-    for _,i in enumerate(torch.topk(outputs[0,2],3)[1]):
-        print("Model's Answer ",_,": ",tokenizer_greek.convert_ids_to_tokens(i.item()),sep='')
-    print("\nCorrect Answer:", "κοινωνικός")
-
-    tt()
-    # ================ EXAMPLE 2 ================
-    text_2 = 'Η [MASK] ενός ταμείου που διευκολύνει την κίνηση του πετρελαίου σ’ όλη τη χώρα.'
-    # text_2 = 'H δημιουργία ενός ταμείου που διευκολύνει την κίνηση του πετρελαίου σ’ όλη τη χώρα.'
-    input_ids = tokenizer_greek.encode(text_2)
-    print("\n",tokenizer_greek.convert_ids_to_tokens(input_ids))
-    outputs = lm_model_greek(torch.tensor([input_ids]))[0]
-    for _,i in enumerate(torch.topk(outputs[0,2],3)[1]):
-        print("Model's Answer ",_,": ",tokenizer_greek.convert_ids_to_tokens(i.item()),sep='')
-    print("\nCorrect Answer:", "δημιουργια")
-
-    tt()
-    # ================ EXAMPLE 3 ================
-    text_3 = 'Οι κανόνες [MASK] των δεδομένων προσωπικού χαρακτήρα διέπουν σημαντικές πτυχές του τρόπου αλληλεπίδρασης των επιγραμμικών υπηρεσιών με τους χρήστες, ωστόσο, ισχύουν επίσης και άλλοι κανόνες.'
-    # text_3 = 'Οι κανόνες προστασίας των δεδομένων προσωπικού χαρακτήρα διέπουν σημαντικές πτυχές του τρόπου αλληλεπίδρασης των επιγραμμικών υπηρεσιών με τους χρήστες, ωστόσο, ισχύουν επίσης και άλλοι κανόνες.'
-    input_ids = tokenizer_greek.encode(text_3)
-    print("\n",tokenizer_greek.convert_ids_to_tokens(input_ids))
-    outputs = lm_model_greek(torch.tensor([input_ids]))[0]
-    for _,i in enumerate(torch.topk(outputs[0,3],3)[1]):
-        print("Model's Answer ",_,": ",tokenizer_greek.convert_ids_to_tokens(i.item()),sep='')
-    print("\nCorrect Answer:", "προστασίας")
-    tt()
+    # tt()
+    # # ================ EXAMPLE 3 ================
+    # text_3 = 'Οι κανόνες [MASK] των δεδομένων προσωπικού χαρακτήρα διέπουν σημαντικές πτυχές του τρόπου αλληλεπίδρασης των επιγραμμικών υπηρεσιών με τους χρήστες, ωστόσο, ισχύουν επίσης και άλλοι κανόνες.'
+    # # text_3 = 'Οι κανόνες προστασίας των δεδομένων προσωπικού χαρακτήρα διέπουν σημαντικές πτυχές του τρόπου αλληλεπίδρασης των επιγραμμικών υπηρεσιών με τους χρήστες, ωστόσο, ισχύουν επίσης και άλλοι κανόνες.'
+    # input_ids = tokenizer_greek.encode(text_3)
+    # print("\n",tokenizer_greek.convert_ids_to_tokens(input_ids))
+    # outputs = lm_model_greek(torch.tensor([input_ids]))[0]
+    # for _,i in enumerate(torch.topk(outputs[0,3],3)[1]):
+    #     print("Model's Answer ",_,": ",tokenizer_greek.convert_ids_to_tokens(i.item()),sep='')
+    # print("\nCorrect Answer:", "προστασίας")
+    # tt()
 
     random.seed(seed_val)
     np.random.seed(seed_val)
