@@ -172,6 +172,16 @@ class NERBERTSystemWrapper:
         print(len(true_labels[2]))
         print((true_labels[2]))
         # true labels = (5349,38)
+        
+        true_labels = torch.tensor(true_labels)
+        print(true_labels.shape)
+        # Compute training accuracy
+        flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
+        # active_logits = logits.view(-1, model.num_labels) # shape (batch_size * seq_len, num_labels)
+        # flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size * seq_len,)
+        # active_accuracy = b_labels.view(-1) != -100 # shape (batch_size * seq_len)
+        # labels = torch.masked_select(flattened_targets, active_accuracy)
+        # predictions = torch.masked_select(flattened_predictions, active_accuracy)
 
         predictions = self._system.predict(eval_dataloader)
 
