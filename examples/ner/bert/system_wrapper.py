@@ -165,21 +165,20 @@ class NERBERTSystemWrapper:
 
             b_labels = batch['target']
 
-            print(type(b_labels),b_labels.shape)
+            # print(type(b_labels),b_labels.shape)
 
-            if batch_idx == 0:
-                print(self._system.predict_batch(batch['input']).shape)
+            logits = self._system.predict_batch(batch['input']).shape)
             
             # Compute training accuracy
-        #     flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
-        #     active_logits = logits.view(-1, 17) # shape (batch_size * seq_len, num_labels)
-        #     flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size * seq_len,)
-        #     active_accuracy = b_labels.view(-1) != -100 # shape (batch_size * seq_len)
-        #     labels = torch.masked_select(flattened_targets, active_accuracy)
-        #     predictions = torch.masked_select(flattened_predictions, active_accuracy)
+            flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
+            active_logits = logits.view(-1, 17) # shape (batch_size * seq_len, num_labels)
+            flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size * seq_len,)
+            active_accuracy = b_labels.view(-1) != -1 # shape (batch_size * seq_len)
+            labels = torch.masked_select(flattened_targets, active_accuracy)
+            predictions = torch.masked_select(flattened_predictions, active_accuracy)
 
-        #     test_labels.extend(labels)
-        #     test_preds.extend(predictions)
+            test_labels.extend(labels)
+            test_preds.extend(predictions)
         
         # final_labels = [ids_to_labels[id.item()] for id in test_labels]
         # final_predictions = [ids_to_labels[id.item()] for id in test_preds]
