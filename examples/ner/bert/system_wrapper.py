@@ -165,7 +165,7 @@ class NERBERTSystemWrapper:
         for batch_idx, batch in enumerate(eval_dataloader):
 
             print(batch)
-            b_labels, b_input = batch['target'], batch['input']
+            b_labels, b_input = batch['target'], torch.FloatTensor(batch['input'])
 
             print(type(b_labels),b_labels.shape)
             print(type(b_input),b_input.shape)
