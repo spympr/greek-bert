@@ -164,7 +164,6 @@ class NERBERTSystemWrapper:
         test_preds,test_labels = [], []
         for batch_idx, batch in enumerate(eval_dataloader):
 
-            print(batch)
             b_labels, b_input = batch['target'].to('cuda'), batch['input']
 
             logits = self._system.predict_batch(b_input)
