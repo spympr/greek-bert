@@ -160,63 +160,36 @@ class NERBERTSystemWrapper:
 
         from seqeval.metrics import classification_report
 
-        # print(type(eval_dataloader))
-        true_labels = []
-        for batch_idx, samples in enumerate(eval_dataloader):
-            # print((samples['target']))
-            print(samples['target'].shape)
-            print(type(samples['target']))
-            true_labels.append(samples['target'].tolist())
+        test_preds,test_labels = [], []
+        for batch_idx, batch in enumerate(eval_dataloader):
 
-        print()
-        true_labels = [item for sublist in true_labels for item in sublist]
-        print(len(true_labels))
-        print(len(true_labels[2]))
-        print((true_labels[2]))
-        # true labels = (5349,38)
+            b_labels = batch['target']
+
+            print(type(b_labels),b_labels.shape)
+
+
+
+            if batch_idx == 0:
+                print(self._system.predict_batch(batch).shape)
+            
+            # Compute training accuracy
+        #     flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
+        #     active_logits = logits.view(-1, 17) # shape (batch_size * seq_len, num_labels)
+        #     flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size * seq_len,)
+        #     active_accuracy = b_labels.view(-1) != -100 # shape (batch_size * seq_len)
+        #     labels = torch.masked_select(flattened_targets, active_accuracy)
+        #     predictions = torch.masked_select(flattened_predictions, active_accuracy)
+
+        #     test_labels.extend(labels)
+        #     test_preds.extend(predictions)
         
-        # b_labels = torch.FloatTensor(true_labels)
-
-        # print(b_labels.shape)
+        # final_labels = [ids_to_labels[id.item()] for id in test_labels]
+        # final_predictions = [ids_to_labels[id.item()] for id in test_preds]
         
-        print(eval_dataloader['target'].shape)
-
-        # Compute training accuracy
-        # flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
-        # active_logits = logits.view(-1, model.num_labels) # shape (batch_size * seq_len, num_labels)
-        # flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size * seq_len,)
-        # active_accuracy = b_labels.view(-1) != -100 # shape (batch_size * seq_len)
-        # labels = torch.masked_select(flattened_targets, active_accuracy)
-        # predictions = torch.masked_select(flattened_predictions, active_accuracy)
-
-        predictions = self._system.predict(eval_dataloader)
-
-        print()
-        total_predictions = []
-        for k,i in enumerate(predictions['outputs']):
-            i = torch.FloatTensor(i)
-            # if k==1:
-                # print(i.shape)
-                # print(i.argmax().numpy())
-            total_predictions.append(i.argmax().numpy())
-
-        
-        print()
-        # print((total_predictions[1]))
-        # print(len(total_predictions))
-
-        # print(predictions)
-        # print(type(predictions['outputs'][0]))
-        # print(len(predictions['outputs']))
-        # print(len(predictions['outputs'][0]))
-        # print((predictions['outputs'][0]))
-        # print(predictions)
-        # for i in predictions['outputs']:
-        # print((i))
 
         print("WE ARE DONE")
-        print(classification_report(true_labels,total_predictions),target_names=eval_dataset.I2L)
-        print(set(true_labels)-set(total_predictions))
+        print(classification_report(test_labels,test_preds),target_names=eval_dataset.I2L)
+        print(set(test_labels)-set(test_preds))
 
         #########################################################################################
 
