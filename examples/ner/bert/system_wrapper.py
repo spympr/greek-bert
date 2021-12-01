@@ -176,10 +176,11 @@ class NERBERTSystemWrapper:
 
         print()
         total_predictions = []
-        for i in predictions['outputs']:
+        for k,i in enumerate(predictions['outputs']):
             i = torch.FloatTensor(i)
-            # print(i)
-            # print(i.argmax().numpy())
+            if k==1:
+                print(i)
+                print(i.argmax().numpy())
             total_predictions.append(i.argmax().numpy())
 
         print()
