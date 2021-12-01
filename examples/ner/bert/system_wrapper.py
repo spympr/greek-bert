@@ -185,7 +185,7 @@ class NERBERTSystemWrapper:
 
         print()
         print(len(total_predictions))
-        print((total_predictions[0]))
+        print((total_predictions[1]))
         # print(predictions)
         # print(type(predictions['outputs'][0]))
         # print(len(predictions['outputs']))
