@@ -67,7 +67,7 @@ def ner():
 def greek_bert():
     pass
 
-train_path,dev_path,test_path = '../NER/train.txt','../NER/dev.txt','../NER/test.txt'
+train_path,dev_path,test_path = '../NER_NEW/train.txt','../NER_NEW/dev.txt','../NER_NEW/test.txt'
 MODELS = ['alexaapo/greek_legal_bert_v2','nlpaueb/bert-base-greek-uncased-v1','alexaapo/greek_legal_bert_v1']
 
 @greek_bert.command()   
@@ -110,7 +110,7 @@ def run(train_dataset_file, dev_dataset_file, test_dataset_file, model_weights_s
         {'dp': dp}
     )
 
-    # sw.train(train_dataset_file, dev_dataset_file, lr, batch_size, grad_accumulation_steps, multi_gpu, not silent, seed)
+    sw.train(train_dataset_file, dev_dataset_file, lr, batch_size, grad_accumulation_steps, multi_gpu, not silent, seed)
     results = sw.evaluate(test_dataset_file, batch_size, multi_gpu, not silent)
 
     print(results)

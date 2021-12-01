@@ -167,9 +167,6 @@ class NERBERTSystemWrapper:
             print(batch)
             b_labels, b_input = batch['target'].to('cuda'), batch['input']
 
-            # print(type(b_labels),b_labels.shape)
-            # print(type(b_input),b_input.shape)
-
             logits = self._system.predict_batch(b_input)
             
             # Compute training accuracy
@@ -186,7 +183,6 @@ class NERBERTSystemWrapper:
         final_labels = [eval_dataset.I2L[id.item()] for id in test_labels]
         final_predictions = [eval_dataset.I2L[id.item()] for id in test_preds]
 
-        print("WE ARE DONE")
         print(classification_report([final_labels],[final_predictions]))
         print(set(final_labels)-set(final_predictions))
 #########################################################################################################################
