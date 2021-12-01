@@ -170,7 +170,7 @@ class NERBERTSystemWrapper:
 
 
             if batch_idx == 0:
-                print(self._system.predict_batch(batch).shape)
+                print(self._system.predict_batch(batch[self.batch_input_key).shape)
             
             # Compute training accuracy
         #     flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
