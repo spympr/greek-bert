@@ -160,20 +160,20 @@ class NERBERTSystemWrapper:
 
         from seqeval.metrics import classification_report
 
-        print(type(eval_dataloader))
+        # print(type(eval_dataloader))
         true_labels = []
         for batch_idx, samples in enumerate(eval_dataloader):
-            print((samples['target']))
+            # print((samples['target']))
             true_labels.append(samples['target'].tolist())
 
-        print()
-        for j in true_labels:
-            print(j)
+        # print()
+        # for j in true_labels:
+            # print(j)
 
-        print()
+        # print()
         true_labels = [item for sublist in true_labels for item in sublist]
         print(len(true_labels))
-        print((true_labels))
+        # print((true_labels))
         print(len(true_labels[0]))
 
         predictions = self._system.predict(
@@ -183,22 +183,23 @@ class NERBERTSystemWrapper:
         total_predictions = []
         for i in predictions['outputs']:
             i = torch.FloatTensor(i)
-            print(i)
-            print(i.argmax().numpy())
+            # print(i)
+            # print(i.argmax().numpy())
             total_predictions.append(i.argmax().numpy())
 
         print()
-        print((total_predictions))
+        # print((total_predictions))
         print(len(total_predictions))
-        print(predictions)
-        print(type(predictions['outputs'][0]))
+        # print(predictions)
+        # print(type(predictions['outputs'][0]))
         print(len(predictions['outputs']))
         print(len(predictions['outputs'][0]))
-        print((predictions['outputs'][0]))
+        # print((predictions['outputs'][0]))
         # print(predictions)
         # for i in predictions['outputs']:
         # print((i))
 
+        
         print(classification_report([true_labels],[total_predictions]),target_names=eval_dataset.I2L)
         print(set(true_labels)-set(total_predictions))
 
