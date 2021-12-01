@@ -173,13 +173,13 @@ class NERBERTSystemWrapper:
         # print()
         true_labels = [item for sublist in true_labels for item in sublist]
         print(len(true_labels))
-        # print((true_labels))
-        print(len(true_labels[0]))
+        print((true_labels[0]))
+        # print(len(true_labels[0]))
 
         predictions = self._system.predict(
             eval_dataloader)
 
-        print()
+        # print()
         total_predictions = []
         for i in predictions['outputs']:
             i = torch.FloatTensor(i)
@@ -188,12 +188,12 @@ class NERBERTSystemWrapper:
             total_predictions.append(i.argmax().numpy())
 
         print()
-        # print((total_predictions))
         print(len(total_predictions))
+        print((total_predictions[0]))
         # print(predictions)
         # print(type(predictions['outputs'][0]))
-        print(len(predictions['outputs']))
-        print(len(predictions['outputs'][0]))
+        # print(len(predictions['outputs']))
+        # print(len(predictions['outputs'][0]))
         # print((predictions['outputs'][0]))
         # print(predictions)
         # for i in predictions['outputs']:
