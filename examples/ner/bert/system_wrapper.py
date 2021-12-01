@@ -179,7 +179,7 @@ class NERBERTSystemWrapper:
         for k,i in enumerate(predictions['outputs']):
             i = torch.FloatTensor(i)
             if k==1:
-                print(i)
+                print(i.shape)
                 print(i.argmax().numpy())
             total_predictions.append(i.argmax().numpy())
 
@@ -195,9 +195,10 @@ class NERBERTSystemWrapper:
         # for i in predictions['outputs']:
         # print((i))
 
-        
         print(classification_report(true_labels,total_predictions),target_names=eval_dataset.I2L)
         print(set(true_labels)-set(total_predictions))
+
+        #########################################################################################
 
         if run_on_multi_gpus:
             return self._system.evaluate_on_multi_gpus(eval_dataloader, evals, verbose=verbose)
