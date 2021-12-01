@@ -167,7 +167,7 @@ class NERBERTSystemWrapper:
             b_labels, b_input = batch['target'], batch['input']
 
             if batch_idx==0:
-                print(b_labels.get_device(),b_input.get_device())
+                print(b_labels.get_device(),b_input[0].get_device(),b_input[1].get_device())
             logits = self._system.predict_batch(b_input)
             
             # Compute training accuracy
