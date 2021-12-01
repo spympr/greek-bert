@@ -200,7 +200,7 @@ class NERBERTSystemWrapper:
         # print((i))
 
         
-        print(classification_report([true_labels],[total_predictions]),target_names=eval_dataset.I2L)
+        print(classification_report(true_labels,total_predictions),target_names=eval_dataset.I2L)
         print(set(true_labels)-set(total_predictions))
 
         if run_on_multi_gpus:
