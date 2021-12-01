@@ -163,8 +163,7 @@ class NERBERTSystemWrapper:
         test_preds,test_labels = [], []
         for batch_idx, batch in enumerate(eval_dataloader):
 
-            if torch.cuda.is_available():
-                b_labels, b_input = batch['target'], batch['input']
+            b_labels, b_input = batch['target'], batch['input']
 
             print(type(b_labels),b_labels.shape)
             print(type(b_input),b_input.shape)
@@ -182,13 +181,12 @@ class NERBERTSystemWrapper:
             test_labels.extend(labels)
             test_preds.extend(predictions)
         
-        # final_labels = [ids_to_labels[id.item()] for id in test_labels]
-        # final_predictions = [ids_to_labels[id.item()] for id in test_preds]
-        
+        final_labels = [eval_dataset.I2L[id.item()] for id in test_labels]
+        final_predictions = [eval_dataset.I2L[id.item()] for id in test_preds]
 
         print("WE ARE DONE")
-        print(classification_report(test_labels,test_preds),target_names=eval_dataset.I2L)
-        print(set(test_labels)-set(test_preds))
+        print(classification_report(final_labels,final_predictions))
+        print(set(final_labels)-set(final_predictions))
 
         #########################################################################################
 
