@@ -131,7 +131,7 @@ class NERBERTSystemWrapper:
         )
         return self._evaluate_impl(eval_dataset, batch_size, run_on_multi_gpus, tokenizer.pad_token_id, True, verbose)
 
-    def _evaluate_impl(self, eval_dataset, batch_size, run_on_multi_gpus, pad_value, eval_,verbose=True):
+    def _evaluate_impl(self, eval_dataset, batch_size, run_on_multi_gpus, pad_value, report, verbose=True):
 
         eval_dataloader = DataLoader(
             eval_dataset,
@@ -159,7 +159,7 @@ class NERBERTSystemWrapper:
         }
 
 #########################################################################################################################
-        if eval_ == True:    
+        if report == True:    
             from seqeval.metrics import classification_report
 
             test_preds,test_labels = [], []
