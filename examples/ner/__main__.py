@@ -95,8 +95,8 @@ def tune(train_dataset_file, dev_dataset_file, multi_gpu,which_model):
 @click.option('--model-weights-save-path', type=str, default=None)
 @click.option('--batch-size', type=int, default=8)
 @click.option('--lr', type=float, default=5e-05)
-@click.option('--dp', type=float, default=0.1)
-@click.option('--grad-accumulation-steps', type=int, default=2)
+@click.option('--dp', type=float, default=0)
+@click.option('--grad-accumulation-steps', type=int, default=4)
 @click.option('--multi-gpu', is_flag=True)
 @click.option('--silent', is_flag=True)
 @click.option('--seed', type=int, default=0)
@@ -110,7 +110,7 @@ def run(train_dataset_file, dev_dataset_file, test_dataset_file, model_weights_s
         {'dp': dp}
     )
 
-    # sw.train(train_dataset_file, dev_dataset_file, lr, batch_size, grad_accumulation_steps, multi_gpu, not silent, seed)
+    sw.train(train_dataset_file, dev_dataset_file, lr, batch_size, grad_accumulation_steps, multi_gpu, not silent, seed)
     results = sw.evaluate(test_dataset_file, batch_size, multi_gpu, not silent)
 
     print(results)
