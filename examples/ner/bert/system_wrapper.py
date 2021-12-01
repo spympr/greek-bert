@@ -167,7 +167,7 @@ class NERBERTSystemWrapper:
 
             # print(type(b_labels),b_labels.shape)
 
-            logits = self._system.predict_batch(batch['input']).shape)
+            logits = self._system.predict_batch(batch['input'])
             
             # Compute training accuracy
             flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
