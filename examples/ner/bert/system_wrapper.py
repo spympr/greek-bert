@@ -164,6 +164,8 @@ class NERBERTSystemWrapper:
         true_labels = []
         for batch_idx, samples in enumerate(eval_dataloader):
             # print((samples['target']))
+            print(samples['target'].shape)
+            print(type(samples['target']))
             true_labels.append(samples['target'].tolist())
 
         print()
@@ -178,6 +180,7 @@ class NERBERTSystemWrapper:
         # print(b_labels.shape)
         
         print(eval_dataloader['target'].shape)
+
         # Compute training accuracy
         # flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
         # active_logits = logits.view(-1, model.num_labels) # shape (batch_size * seq_len, num_labels)
@@ -211,6 +214,7 @@ class NERBERTSystemWrapper:
         # for i in predictions['outputs']:
         # print((i))
 
+        print("WE ARE DONE")
         print(classification_report(true_labels,total_predictions),target_names=eval_dataset.I2L)
         print(set(true_labels)-set(total_predictions))
 
