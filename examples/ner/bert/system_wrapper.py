@@ -158,11 +158,13 @@ class NERBERTSystemWrapper:
             ),
         }
 
+#########################################################################################################################
         from seqeval.metrics import classification_report
 
         test_preds,test_labels = [], []
         for batch_idx, batch in enumerate(eval_dataloader):
 
+            print(batch)
             b_labels, b_input = batch['target'], batch['input']
 
             print(type(b_labels),b_labels.shape)
@@ -185,10 +187,9 @@ class NERBERTSystemWrapper:
         final_predictions = [eval_dataset.I2L[id.item()] for id in test_preds]
 
         print("WE ARE DONE")
-        print(classification_report(final_labels,final_predictions))
+        print(classification_report([final_labels],[final_predictions]))
         print(set(final_labels)-set(final_predictions))
-
-        #########################################################################################
+#########################################################################################################################
 
         if run_on_multi_gpus:
             return self._system.evaluate_on_multi_gpus(eval_dataloader, evals, verbose=verbose)
