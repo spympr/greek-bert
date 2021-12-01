@@ -183,8 +183,10 @@ class NERBERTSystemWrapper:
                 print(i.argmax().numpy())
             total_predictions.append(i.argmax().numpy())
 
+        
         print()
         print(len(total_predictions))
+        print(len(total_predictions[1]))
         print((total_predictions[1]))
         # print(predictions)
         # print(type(predictions['outputs'][0]))
