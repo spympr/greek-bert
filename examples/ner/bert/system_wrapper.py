@@ -165,11 +165,10 @@ class NERBERTSystemWrapper:
 
             b_labels = batch['target']
 
-            print(batch)
             print(type(b_labels),b_labels.shape)
 
             if batch_idx == 0:
-                print(self._system.predict_batch(batch).shape)
+                print(self._system.predict_batch(batch['input']).shape)
             
             # Compute training accuracy
         #     flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
