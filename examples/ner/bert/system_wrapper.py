@@ -164,9 +164,10 @@ class NERBERTSystemWrapper:
         for batch_idx, batch in enumerate(eval_dataloader):
 
             if torch.cuda.is_available():
-                b_labels, b_input = batch['target'].cuda(), batch['input'].cuda()
+                b_labels, b_input = batch['target'], batch['input']
 
-            # print(type(b_labels),b_labels.shape)
+            print(type(b_labels),b_labels.shape)
+            print(type(b_input),b_input.shape)
 
             logits = self._system.predict_batch(b_input)
             
