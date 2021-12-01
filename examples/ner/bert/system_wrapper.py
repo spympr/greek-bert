@@ -163,11 +163,12 @@ class NERBERTSystemWrapper:
         test_preds,test_labels = [], []
         for batch_idx, batch in enumerate(eval_dataloader):
 
-            b_labels = batch['target']
+            if torch.cuda.is_available():
+                b_labels, b_input = batch['target'].cuda(), batch['input'].cuda()
 
             # print(type(b_labels),b_labels.shape)
 
-            logits = self._system.predict_batch(batch['input'])
+            logits = self._system.predict_batch(b_input)
             
             # Compute training accuracy
             flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
