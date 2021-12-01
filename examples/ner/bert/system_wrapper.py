@@ -129,9 +129,9 @@ class NERBERTSystemWrapper:
             self._bert_like_special_tokens,
             self._preprocessing_function
         )
-        return self._evaluate_impl(eval_dataset, batch_size, run_on_multi_gpus, tokenizer.pad_token_id, verbose)
+        return self._evaluate_impl(eval_dataset, batch_size, run_on_multi_gpus, tokenizer.pad_token_id, True, verbose)
 
-    def _evaluate_impl(self, eval_dataset, batch_size, run_on_multi_gpus, pad_value, verbose=True):
+    def _evaluate_impl(self, eval_dataset, batch_size, run_on_multi_gpus, pad_value, eval_,verbose=True):
 
         eval_dataloader = DataLoader(
             eval_dataset,
@@ -159,31 +159,32 @@ class NERBERTSystemWrapper:
         }
 
 #########################################################################################################################
-        from seqeval.metrics import classification_report
+        if eval_ == True:    
+            from seqeval.metrics import classification_report
 
-        test_preds,test_labels = [], []
-        for batch_idx, batch in enumerate(eval_dataloader):
+            test_preds,test_labels = [], []
+            for batch_idx, batch in enumerate(eval_dataloader):
 
-            b_labels, b_input = batch['target'].to(torch.device('cuda:0')), batch['input']
+                b_labels, b_input = batch['target'].to(torch.device('cuda:0')), batch['input']
 
-            logits = self._system.predict_batch(b_input)
+                logits = self._system.predict_batch(b_input)
 
-            # Compute training accuracy
-            flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
-            active_logits = logits.view(-1, 17) # shape (batch_size * seq_len, num_labels)
-            flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size * seq_len,)
-            active_accuracy = b_labels.view(-1) != -1 # shape (batch_size * seq_len)
-            labels = torch.masked_select(flattened_targets, active_accuracy)
-            predictions = torch.masked_select(flattened_predictions, active_accuracy)
+                # Compute training accuracy
+                flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
+                active_logits = logits.view(-1, 17) # shape (batch_size * seq_len, num_labels)
+                flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size * seq_len,)
+                active_accuracy = b_labels.view(-1) != -1 # shape (batch_size * seq_len)
+                labels = torch.masked_select(flattened_targets, active_accuracy)
+                predictions = torch.masked_select(flattened_predictions, active_accuracy)
 
-            test_labels.extend(labels)
-            test_preds.extend(predictions)
-        
-        final_labels = [eval_dataset.I2L[id.item()] for id in test_labels]
-        final_predictions = [eval_dataset.I2L[id.item()] for id in test_preds]
+                test_labels.extend(labels)
+                test_preds.extend(predictions)
+            
+            final_labels = [eval_dataset.I2L[id.item()] for id in test_labels]
+            final_predictions = [eval_dataset.I2L[id.item()] for id in test_preds]
 
-        print(classification_report([final_labels],[final_predictions]))
-        print(set(final_labels)-set(final_predictions))
+            print(classification_report([final_labels],[final_predictions]))
+            print(set(final_labels)-set(final_predictions))
 #########################################################################################################################
 
         if run_on_multi_gpus:
@@ -250,7 +251,8 @@ class NERBERTSystemWrapper:
                 val_dataset,
                 batch_size,
                 run_on_multi_gpus,
-                tokenizer.pad_token_id
+                tokenizer.pad_token_id,
+                False
             )
             results.append([current_results['macro-f1'].score, (lr, dp, grad_accumulation_steps)])
 
