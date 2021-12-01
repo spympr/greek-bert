@@ -164,10 +164,11 @@ class NERBERTSystemWrapper:
         test_preds,test_labels = [], []
         for batch_idx, batch in enumerate(eval_dataloader):
 
-            b_labels, b_input = batch['target'], batch['input']
+            b_labels, b_input = batch['target'].to('cuda:0'), batch['input'].to('cuda:0')
+
+            print(b_labels.shape)
 
             logits = self._system.predict_batch(b_input)
-            logits.to('cpu')
 
             # Compute training accuracy
             flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
