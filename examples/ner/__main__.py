@@ -101,8 +101,9 @@ def tune(train_dataset_file, dev_dataset_file, multi_gpu,which_model):
 @click.option('--silent', is_flag=True)
 @click.option('--seed', type=int, default=0)
 @click.option('--which-model', type=int, required=True)
+@click.option('--experiment', type=int, required=True)
 def run(train_dataset_file, dev_dataset_file, test_dataset_file, model_weights_save_path, batch_size, lr, dp,
-        grad_accumulation_steps, multi_gpu, silent, seed, which_model):
+        grad_accumulation_steps, multi_gpu, silent, seed, which_model,experiment):
     sw = NERBERTSystemWrapper(
         MODELS[which_model],
         strip_accents_and_lowercase,
@@ -111,7 +112,7 @@ def run(train_dataset_file, dev_dataset_file, test_dataset_file, model_weights_s
     )
 
     sw.train(train_dataset_file, dev_dataset_file, lr, batch_size, grad_accumulation_steps, multi_gpu, not silent, seed)
-    results = sw.evaluate(test_dataset_file, batch_size, multi_gpu, not silent)
+    results = sw.evaluate(test_dataset_file, batch_size, multi_gpu, which_model, experiment, not silent)
 
     print(results)
     if model_weights_save_path:
