@@ -121,7 +121,7 @@ class NERBERTSystemWrapper:
             verbose=verbose
         )
 
-    def evaluate(self, eval_dataset_file, batch_size, run_on_multi_gpus, verbose=True):
+    def evaluate(self, eval_dataset_file, batch_size, run_on_multi_gpus, which_model, experiment, verbose=True):
         tokenizer = AutoTokenizer.from_pretrained(self._pretrained_bert_name)
         eval_dataset = NERBERTDataset(
             eval_dataset_file,
@@ -129,9 +129,9 @@ class NERBERTSystemWrapper:
             self._bert_like_special_tokens,
             self._preprocessing_function
         )
-        return self._evaluate_impl(eval_dataset, batch_size, run_on_multi_gpus, tokenizer.pad_token_id, True, verbose)
+        return self._evaluate_impl(eval_dataset, batch_size, run_on_multi_gpus, tokenizer.pad_token_id, True, which_model, experiment, verbose)
 
-    def _evaluate_impl(self, eval_dataset, batch_size, run_on_multi_gpus, pad_value, report, verbose=True):
+    def _evaluate_impl(self, eval_dataset, batch_size, run_on_multi_gpus, pad_value, report, which_model, experiment, verbose=True):
 
         eval_dataloader = DataLoader(
             eval_dataset,
@@ -183,8 +183,16 @@ class NERBERTSystemWrapper:
             final_labels = [eval_dataset.I2L[id.item()] for id in test_labels]
             final_predictions = [eval_dataset.I2L[id.item()] for id in test_preds]
 
-            print(classification_report([final_labels],[final_predictions]))
+            report = classification_report([final_labels],[final_predictions])
+            print(report)
             print(set(final_labels)-set(final_predictions))
+
+            dir = ['greek_legal_v2','greek','greek_legal_v1'][which_model]
+            
+            with open('../NER/reports/'+dir+'/report_'+experiment+'.txt', 'w') as f:
+                f.write(report)
+                f.close()
+
 #########################################################################################################################
 
         if run_on_multi_gpus:
