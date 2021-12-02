@@ -187,7 +187,8 @@ class NERBERTSystemWrapper:
             print(report)
             print(set(final_labels)-set(final_predictions))
 
-            dir = ['greek_legagitl_v2','greek','greek_legal_v1'][which_model]
+            dir = ['greek_legal_v2','greek','greek_legal_v1'][which_model]
+            # 
             
             with open('../NER/reports/'+dir+'/report_'+experiment+'.txt', 'w') as f:
                 f.write(report)
