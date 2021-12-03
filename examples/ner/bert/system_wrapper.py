@@ -189,7 +189,7 @@ class NERBERTSystemWrapper:
 
             dir = ['greek_legal_v2','greek','greek_legal_v1'][which_model]
             
-            with open('../NER/reports/'+dir+'/report_'+experiment+'.txt', 'w') as f:
+            with open('../NER/reports/'+dir+'/report_'+str(experiment)+'.txt', 'w') as f:
                 f.write(report)
                 f.close()
 
@@ -260,6 +260,9 @@ class NERBERTSystemWrapper:
                 batch_size,
                 run_on_multi_gpus,
                 tokenizer.pad_token_id,
+                False,
+                -1,
+                -1,
                 False
             )
             results.append([current_results['macro-f1'].score, (lr, dp, grad_accumulation_steps)])
