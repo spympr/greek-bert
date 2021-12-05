@@ -527,7 +527,7 @@ def main():
         f.write("Max Sequence Length:"+str(max_len)+"\n\n")
         f.write(report)
         f.write("\n")
-        f.write(f1)
+        f.write("F1 Score:"+str(f1))
         f.write("\n")
         for stat in all_training_stats:
             f.write("Epoch "+str(stat['epoch'])+"\nTrain Loss: "+str("{:.2f}".format(stat['Training Loss']))+"\nVal Loss:   "+str("{:.2f}".format(stat['Valid. Loss']))+"\n\n")
