@@ -327,7 +327,6 @@ def main():
         # For each batch of training data...
         for step, batch in enumerate(train_dataloader):
 
-            if step == 1:   break
             # Progress update every 40 batches.
             if step % 400 == 0 and not step == 0:
                 # Calculate elapsed time in minutes.
@@ -385,8 +384,6 @@ def main():
 
         # Evaluate data for one epoch
         for step, batch in enumerate(dev_dataloader):
-
-            if step == 1:   break
 
             # Unpack this training batch from our dataloader. 
             b_input_ids,b_input_mask,b_labels = batch['ids'].to(device),batch['mask'].to(device),batch['tags'].to(device)
@@ -489,8 +486,6 @@ def main():
 
     for step, batch in enumerate(test_dataloader):
         
-        if step == 1:   break
-
         # Unpack this training batch from our dataloader. 
         b_input_ids,b_input_mask,b_labels = batch['ids'].to(device),batch['mask'].to(device),batch['tags'].to(device)
 
@@ -516,10 +511,9 @@ def main():
 
     ### Classification Report of Test Results
     report = classification_report(final_labels,final_predictions)
+    f1 = round(f1_score(final_labels,final_predictions,average='micro')*100,2)
     print(report)
     print(set(final_labels)-set(final_predictions))
-
-    f1 = round(f1_score(final_labels,final_predictions,average='micro')*100,2)
     print(f1)
 
     ### Create Report
