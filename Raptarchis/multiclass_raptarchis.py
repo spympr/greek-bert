@@ -7,6 +7,7 @@ from sklearn.metrics import classification_report
 from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import accuracy_score
 from transformers import AutoTokenizer,AutoModel,AutoModelForMaskedLM
+import os,shutil
 
 def tt():
     print("================================================================================================================================================")
@@ -121,6 +122,13 @@ def main():
     device = 'cuda' if cuda.is_available() else 'cpu'
     print(device)
     if device == 'cuda':  print("GPU: {}".format(torch.cuda.get_device_name(0)))
+
+    
+    ### Create directory
+    new_dir = '../Raptarchis/'+str(seed_val)+'/'
+    if os.path.exists(new_dir):
+        shutil.rmtree(new_dir)
+    os.mkdir(new_dir)
 
     ### Retrieve Data
     train_df = pd.read_csv('../Raptarchis/train.csv')
@@ -412,7 +420,7 @@ def main():
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             print("Saving the model with val loss = ","{:.2f}".format(best_val_loss))
-            torch.save(model.state_dict(),'../Raptarchis/'+str(seed_val)+'.pt')
+            torch.save(model.state_dict(),new_dir+str(seed_val)+'.pt')
 
         # Record all statistics from this epoch.
         training_stats.append(
@@ -432,12 +440,12 @@ def main():
     ### Save Load Stats from all epochs
 
     # Save stats
-    with open('../Raptarchis/train_stats_'+str(seed_val)+'.txt', 'a') as f:
+    with open(new_dir+'train_stats_'+str(seed_val)+'.txt', 'a') as f:
         f.write(str(training_stats)+"\n")
         f.close()
 
     all_training_stats, my_lists = [], []
-    with open('../Raptarchis/train_stats_'+str(seed_val)+'.txt', 'r') as f: 
+    with open(new_dir+'train_stats_'+str(seed_val)+'.txt', 'r') as f: 
         for li in f.readlines():
             my_lists.append(ast.literal_eval(li))
         f.close()
@@ -453,7 +461,7 @@ def main():
                 all_training_stats.append(elem)
 
     # Save stats
-    with open('../Raptarchis/train_stats_'+str(seed_val)+'.txt', 'w') as f:
+    with open(new_dir+'train_stats_'+str(seed_val)+'.txt', 'w') as f:
         f.write(str(all_training_stats)+"\n")
         f.close()
 
@@ -466,7 +474,7 @@ def main():
     ### Test Model
     t0 = time.time()
 
-    model.load_state_dict(torch.load('../Raptarchis/'+str(seed_val)+'.pt'))
+    model.load_state_dict(torch.load(new_dir+str(seed_val)+'.pt'))
     model.eval()
 
     test_preds , test_labels = [], []
@@ -508,7 +516,7 @@ def main():
     print(f1)
 
     ### Create Report
-    with open('../Raptarchis/report'+str(seed_val)+'.txt', 'w') as f:
+    with open(new_dir+'report'+str(seed_val)+'.txt', 'w') as f:
         f.write("Model:"+MODEL+"\n")
         f.write("Learning Rate:"+str(learning_rate)+"\n")
         f.write("Batch Size:"+str(batch_size)+"\n")
