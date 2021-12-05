@@ -311,6 +311,7 @@ def main():
         # For each batch of training data...
         for step, batch in enumerate(train_dataloader):
 
+            if step == 1:   break
             # Progress update every 40 batches.
             if step % 400 == 0 and not step == 0:
                 # Calculate elapsed time in minutes.
@@ -368,6 +369,8 @@ def main():
 
         # Evaluate data for one epoch
         for step, batch in enumerate(dev_dataloader):
+
+            if step == 1:   break
 
             # Unpack this training batch from our dataloader. 
             b_input_ids,b_input_mask,b_labels = batch['ids'].to(device),batch['mask'].to(device),batch['tags'].to(device)
@@ -469,6 +472,9 @@ def main():
     test_preds , test_labels = [], []
 
     for step, batch in enumerate(test_dataloader):
+        
+        if step == 1:   break
+
         # Unpack this training batch from our dataloader. 
         b_input_ids,b_input_mask,b_labels = batch['ids'].to(device),batch['mask'].to(device),batch['tags'].to(device)
 
@@ -496,6 +502,10 @@ def main():
     report = classification_report(final_labels,final_predictions)
     print(report)
     print(set(final_labels)-set(final_predictions))
+
+    from sklearn.metrics import f1_score
+    f1 = round(f1_score(final_labels,final_predictions,average='micro')*100,2)
+    print(f1)
 
     ### Create Report
     with open('../Raptarchis/report'+str(seed_val)+'.txt', 'w') as f:
