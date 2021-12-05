@@ -151,10 +151,17 @@ def main():
     else:
         print("ERROR!")
 
+    unique_labels = set()
+    for elem in train_df[category].unique():
+        unique_labels.add(elem)
+    for elem in dev_df[category].unique():
+        unique_labels.add(elem)
+    for elem in test_df[category].unique():
+        unique_labels.add(elem)
+        
     # print("Number of train labels of tags: {}".format(len(train_labels)))
     # print("Number of dev labels of tags: {}".format(len(dev_labels)))
     # print("Number of test labels of tags: {}".format(len(test_labels)),"\n")
-    unique_labels = train_df[category].unique()
 
     print("edw:" , len(unique_labels))
     ### Create labels_to_ids
