@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import torch,time,datetime,random,statistics,ast,argparse
 from torch import cuda,nn
-from sklearn.metrics import classification_report,f1_score
+from sklearn.metrics import classification_report,f1_score,precision_score,recall_score
 from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import accuracy_score
 from transformers import AutoTokenizer,AutoModel,AutoModelForMaskedLM
@@ -512,9 +512,13 @@ def main():
     ### Classification Report of Test Results
     report = classification_report(final_labels,final_predictions)
     f1 = round(f1_score(final_labels,final_predictions,average='micro')*100,2)
+    prec = round(precision_score(final_labels,final_predictions,average='micro')*100,2)
+    rec = round(recall_score(final_labels,final_predictions,average='micro')*100,2)
     print(report)
     print(set(final_labels)-set(final_predictions))
     print(f1)
+    print(prec)
+    print(rec)
 
     ### Create Report
     with open(new_dir+'report'+str(seed_val)+'.txt', 'w') as f:
@@ -527,7 +531,10 @@ def main():
         f.write("Category:"+str(category)+"\n")
         f.write("Max Sequence Length:"+str(max_len)+"\n\n")
         f.write(report)
-        f.write("\nF1 Score:"+str(f1)+"\n\n")
+        f.write("\nF1 Score:"+str(f1)+"\n")
+        f.write("Precision Score:"+str(prec)+"\n")
+        f.write("Recall Score:"+str(rec)+"\n\n")
+
         for stat in all_training_stats:
             f.write("Epoch "+str(stat['epoch'])+"\nTrain Loss: "+str("{:.2f}".format(stat['Training Loss']))+"\nVal Loss:   "+str("{:.2f}".format(stat['Valid. Loss']))+"\n\n")
         f.close()
