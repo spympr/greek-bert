@@ -162,8 +162,8 @@ def main():
     # print("Number of train labels of tags: {}".format(len(train_labels)))
     # print("Number of dev labels of tags: {}".format(len(dev_labels)))
     # print("Number of test labels of tags: {}".format(len(test_labels)),"\n")
+    print("Unique Labels:" , len(unique_labels))
 
-    print("edw:" , len(unique_labels))
     ### Create labels_to_ids
     labels_to_ids = {k: v for v, k in enumerate(train_labels)}
     ids_to_labels = {v: k for v, k in enumerate(train_labels)}
