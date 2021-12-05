@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import torch,time,datetime,random,statistics,ast,argparse
 from torch import cuda,nn
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report,f1_score
 from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import accuracy_score
 from transformers import AutoTokenizer,AutoModel,AutoModelForMaskedLM
@@ -156,6 +156,7 @@ def main():
     # print("Number of test labels of tags: {}".format(len(test_labels)),"\n")
     unique_labels = train_df[category].unique()
 
+    print("edw:" , unique_labels)
     ### Create labels_to_ids
     labels_to_ids = {k: v for v, k in enumerate(train_labels)}
     ids_to_labels = {v: k for v, k in enumerate(train_labels)}
@@ -511,7 +512,6 @@ def main():
     print(report)
     print(set(final_labels)-set(final_predictions))
 
-    from sklearn.metrics import f1_score
     f1 = round(f1_score(final_labels,final_predictions,average='micro')*100,2)
     print(f1)
 
@@ -526,9 +526,7 @@ def main():
         f.write("Category:"+str(category)+"\n")
         f.write("Max Sequence Length:"+str(max_len)+"\n\n")
         f.write(report)
-        f.write("\n")
-        f.write("F1 Score:"+str(f1))
-        f.write("\n")
+        f.write("\nF1 Score:"+str(f1)+"\n\n")
         for stat in all_training_stats:
             f.write("Epoch "+str(stat['epoch'])+"\nTrain Loss: "+str("{:.2f}".format(stat['Training Loss']))+"\nVal Loss:   "+str("{:.2f}".format(stat['Valid. Loss']))+"\n\n")
         f.close()
