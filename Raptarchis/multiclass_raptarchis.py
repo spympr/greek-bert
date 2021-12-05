@@ -156,7 +156,7 @@ def main():
     # print("Number of test labels of tags: {}".format(len(test_labels)),"\n")
     unique_labels = train_df[category].unique()
 
-    print("edw:" , unique_labels)
+    print("edw:" , len(unique_labels))
     ### Create labels_to_ids
     labels_to_ids = {k: v for v, k in enumerate(train_labels)}
     ids_to_labels = {v: k for v, k in enumerate(train_labels)}
