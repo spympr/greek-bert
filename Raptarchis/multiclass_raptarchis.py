@@ -90,7 +90,8 @@ def main():
     parser.add_argument("--category", required=True, help="volume or chapter or subject")
     parser.add_argument("--epochs", type=int, required=True)
     parser.add_argument("--batch_size", type=int, default=8)
-    parser.add_argument("--seed_val", type=int, required=True)
+    parser.add_argument("--seed_val", type=int, default=1338)
+    parser.add_argument("--exp", type=int, required=True)
     parser.add_argument("--learning_rate", type=float, default=2e-05)
     parser.add_argument("--dp_prob", type=float, default=0.1)
     parser.add_argument("--max_len", type=int, default=512)
@@ -106,6 +107,7 @@ def main():
     dp_prob = args.dp_prob
     max_len = args.max_len
     seed_val = args.seed_val
+    experiment = args.exp
     RELOAD = args.reload
     #############################################################################################################
     print("Model:",MODEL)
@@ -125,7 +127,7 @@ def main():
 
     
     ### Create directory
-    new_dir = '../Raptarchis/'+str(seed_val)+'/'
+    new_dir = '../Raptarchis/'+str(experiment)+'/'
     if os.path.exists(new_dir):
         shutil.rmtree(new_dir)
     os.mkdir(new_dir)
@@ -421,7 +423,7 @@ def main():
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             print("Saving the model with val loss = ","{:.2f}".format(best_val_loss))
-            torch.save(model.state_dict(),new_dir+str(seed_val)+'.pt')
+            torch.save(model.state_dict(),new_dir+str(experiment)+'.pt')
 
         # Record all statistics from this epoch.
         training_stats.append(
@@ -441,12 +443,12 @@ def main():
     ### Save Load Stats from all epochs
 
     # Save stats
-    with open(new_dir+'train_stats_'+str(seed_val)+'.txt', 'a') as f:
+    with open(new_dir+'train_stats_'+str(experiment)+'.txt', 'a') as f:
         f.write(str(training_stats)+"\n")
         f.close()
 
     all_training_stats, my_lists = [], []
-    with open(new_dir+'train_stats_'+str(seed_val)+'.txt', 'r') as f: 
+    with open(new_dir+'train_stats_'+str(experiment)+'.txt', 'r') as f: 
         for li in f.readlines():
             my_lists.append(ast.literal_eval(li))
         f.close()
@@ -462,7 +464,7 @@ def main():
                 all_training_stats.append(elem)
 
     # Save stats
-    with open(new_dir+'train_stats_'+str(seed_val)+'.txt', 'w') as f:
+    with open(new_dir+'train_stats_'+str(experiment)+'.txt', 'w') as f:
         f.write(str(all_training_stats)+"\n")
         f.close()
 
@@ -475,7 +477,7 @@ def main():
     ### Test Model
     t0 = time.time()
 
-    model.load_state_dict(torch.load(new_dir+str(seed_val)+'.pt'))
+    model.load_state_dict(torch.load(new_dir+str(experiment)+'.pt'))
     model.eval()
 
     test_preds , test_labels = [], []
@@ -517,7 +519,7 @@ def main():
     print(rec)
 
     ### Create Report
-    with open(new_dir+'report'+str(seed_val)+'.txt', 'w') as f:
+    with open(new_dir+'report'+str(experiment)+'.txt', 'w') as f:
         f.write("Model:"+MODEL+"\n")
         f.write("Learning Rate:"+str(learning_rate)+"\n")
         f.write("Batch Size:"+str(batch_size)+"\n")
