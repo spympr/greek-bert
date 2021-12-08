@@ -194,7 +194,7 @@ def main():
     model = RaptarchisBERT(AutoModel.from_pretrained(MODEL),len(unique_labels),dp_prob).to(device)
 
     if RELOAD:
-        model.load_state_dict(torch.load('../Raptarchis/'+str(seed_val)+'.pt'))
+        model.load_state_dict(torch.load(new_dir+str(experiment)+'.pt'))
         model.to(device)
 
     loss_fn = nn.CrossEntropyLoss().to(device)
@@ -483,7 +483,6 @@ def main():
     t0 = time.time()
 
     model.load_state_dict(torch.load(new_dir+str(experiment)+'.pt'))
-    model.to(device)
     model.eval()
 
     test_preds , test_labels = [], []
