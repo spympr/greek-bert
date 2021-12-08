@@ -483,6 +483,7 @@ def main():
     t0 = time.time()
 
     model.load_state_dict(torch.load(new_dir+str(experiment)+'.pt'))
+    print(new_dir+str(experiment)+'.pt')
     model.eval()
 
     test_preds , test_labels = [], []
