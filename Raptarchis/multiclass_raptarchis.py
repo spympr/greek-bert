@@ -538,8 +538,9 @@ def main():
         f.write("Precision Score:"+str(prec)+"\n")
         f.write("Recall Score:"+str(rec)+"\n\n")
 
-        for stat in all_training_stats:
-            f.write("Epoch "+str(stat['epoch'])+"\nTrain Loss: "+str("{:.2f}".format(stat['Training Loss']))+"\nVal Loss:   "+str("{:.2f}".format(stat['Valid. Loss']))+"\n\n")
+        if pred_only == False:
+            for stat in all_training_stats:
+                f.write("Epoch "+str(stat['epoch'])+"\nTrain Loss: "+str("{:.2f}".format(stat['Training Loss']))+"\nVal Loss:   "+str("{:.2f}".format(stat['Valid. Loss']))+"\n\n")
         f.close()
 
 if __name__ == "__main__":
