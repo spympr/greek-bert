@@ -92,10 +92,12 @@ def main():
     parser.add_argument("--batch_size", type=int, default=8)
     parser.add_argument("--seed_val", type=int, default=1338)
     parser.add_argument("--exp", type=int, required=True)
+    parser.add_argument("--report_exp", type=int, required=True)
     parser.add_argument("--learning_rate", type=float, default=2e-05)
     parser.add_argument("--dp_prob", type=float, default=0.1)
     parser.add_argument("--max_len", type=int, default=512)
-    parser.add_argument('--reload', default=False, action='store_true')
+    parser.add_argument("--reload", default=False, action="store_true")
+    parser.add_argument("--pred_only", default=False, action="store_true")    
     args = parser.parse_args()
     #############################################################################################################
     MODELS = ['alexaapo/greek_legal_bert_v2','nlpaueb/bert-base-greek-uncased-v1','alexaapo/greek_legal_bert_v1']
@@ -108,6 +110,8 @@ def main():
     max_len = args.max_len
     seed_val = args.seed_val
     experiment = args.exp
+    report_exp = args.report_exp
+    pred_only = args.pred_only
     RELOAD = args.reload
     #############################################################################################################
     print("Model:",MODEL)
@@ -125,33 +129,33 @@ def main():
     print(device)
     if device == 'cuda':  print("GPU: {}".format(torch.cuda.get_device_name(0)))
 
-    
     ### Create directory
     new_dir = '../Raptarchis/'+str(experiment)+'/'
-    if os.path.exists(new_dir):
-        shutil.rmtree(new_dir)
-    os.mkdir(new_dir)
+    if pred_only == False:
+        if os.path.exists(new_dir):
+            shutil.rmtree(new_dir)
+        os.mkdir(new_dir)
 
     ### Retrieve Data
     train_df = pd.read_csv('../Raptarchis/train.csv')
     dev_df   = pd.read_csv('../Raptarchis/dev.csv')
     test_df  = pd.read_csv('../Raptarchis/test.csv')
 
-    ### No of Labels in each Set
-    if category == 'volume':
-        train_labels = train_df.volume.unique()
-        dev_labels = dev_df.volume.unique()
-        test_labels = test_df.volume.unique()
-    elif category == 'chapter':
-        train_labels = train_df.chapter.unique()
-        dev_labels = dev_df.chapter.unique()
-        test_labels = test_df.chapter.unique()
-    elif category == 'subject':
-        train_labels = train_df.subject.unique()
-        dev_labels = dev_df.subject.unique()
-        test_labels = test_df.subject.unique()
-    else:
-        print("ERROR!")
+    # ### No of Labels in each Set
+    # if category == 'volume':
+    #     train_labels = train_df.volume.unique()
+    #     dev_labels = dev_df.volume.unique()
+    #     test_labels = test_df.volume.unique()
+    # elif category == 'chapter':
+    #     train_labels = train_df.chapter.unique()
+    #     dev_labels = dev_df.chapter.unique()
+    #     test_labels = test_df.chapter.unique()
+    # elif category == 'subject':
+    #     train_labels = train_df.subject.unique()
+    #     dev_labels = dev_df.subject.unique()
+    #     test_labels = test_df.subject.unique()
+    # else:
+    #     print("ERROR!")
 
     unique_labels = set()
     for elem in train_df[category].unique():
@@ -293,186 +297,187 @@ def main():
     torch.manual_seed(seed_val)
     torch.cuda.manual_seed_all(seed_val)
 
-    ### Train & Evaluate Model
+    if pred_only == False:
+        ### Train & Evaluate Model
 
-    # We'll store a number of quantities such as training and validation loss, validation accuracy, and timings.
-    training_stats = []
+        # We'll store a number of quantities such as training and validation loss, validation accuracy, and timings.
+        training_stats = []
 
-    # Measure the total training time for the whole run.
-    total_t0 = time.time()
+        # Measure the total training time for the whole run.
+        total_t0 = time.time()
 
-    best_val_loss = init_best_loss(RELOAD,seed_val)
+        best_val_loss = init_best_loss(RELOAD,seed_val)
 
-    # For each epoch...
-    for epoch_i in range(0, epochs):
-        
-        # ========================================
-        #               Training
-        # ========================================
-        
-        # Perform one full pass over the training set.
-
-        print("")
-        print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, epochs))
-        print('Training...')
-
-        t0 = time.time()
-
-        total_train_loss = 0
-
-        model.train()
-
-        # For each batch of training data...
-        for step, batch in enumerate(train_dataloader):
-
-            # Progress update every 40 batches.
-            if step % 400 == 0 and not step == 0:
-                # Calculate elapsed time in minutes.
-                elapsed = format_time(time.time() - t0)
-                # Report progress.
-                print('  Batch {:>5,}  of  {:>5,}.    Elapsed: {:}.'.format(step, len(train_dataloader), elapsed))
-
-            # Unpack this training batch from our dataloader. 
-            b_input_ids,b_input_mask,b_labels = batch['ids'].to(device),batch['mask'].to(device),batch['tags'].to(device)
-
-            # Always clear any previously calculated gradients before performing a backward pass.
-            model.zero_grad()        
-
-            # Perform a forward pass (evaluate the model on this training batch).
-            logits = model(b_input_ids,b_input_mask)
-            loss = loss_fn(logits.view(-1,model.num_labels), b_labels.view(-1))  
-
-            # Perform a backward pass to calculate the gradients.
-            loss.backward()
-
-            # Accumulate the training loss over all of the batches 
-            total_train_loss += loss.item()
+        # For each epoch...
+        for epoch_i in range(0, epochs):
             
-            # Clip the norm of the gradients to 1.0 (prevent the "exploding gradients" problem)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-
-            # Update parameters and take a step using the computed gradient.
-            optimizer.step()
-
-        # Calculate the average loss over all of the batches.
-        avg_train_loss = total_train_loss/len(train_dataloader)
-        print("\n  Average training loss: {0:.2f}".format(avg_train_loss))
-
-        # Measure how long this epoch took.
-        training_time = format_time(time.time() - t0)
-        print("  Training epoch took: {:}".format(training_time))
+            # ========================================
+            #               Training
+            # ========================================
             
-        # ========================================
-        #               Validation
-        # ========================================
-        # After the completion of each training epoch, measure our performance on our validation set.
+            # Perform one full pass over the training set.
 
-        print("")
-        print("Running Validation...")
+            print("")
+            print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, epochs))
+            print('Training...')
 
-        t0 = time.time()
+            t0 = time.time()
 
-        # Put the model in evaluation mode--the dropout layers behave differently during evaluation.
-        model.eval()
+            total_train_loss = 0
 
-        # Tracking variables 
-        total_eval_accuracy = 0
-        total_eval_loss = 0
-        nb_eval_steps = 0
+            model.train()
 
-        # Evaluate data for one epoch
-        for step, batch in enumerate(dev_dataloader):
+            # For each batch of training data...
+            for step, batch in enumerate(train_dataloader):
 
-            # Unpack this training batch from our dataloader. 
-            b_input_ids,b_input_mask,b_labels = batch['ids'].to(device),batch['mask'].to(device),batch['tags'].to(device)
+                # Progress update every 40 batches.
+                if step % 400 == 0 and not step == 0:
+                    # Calculate elapsed time in minutes.
+                    elapsed = format_time(time.time() - t0)
+                    # Report progress.
+                    print('  Batch {:>5,}  of  {:>5,}.    Elapsed: {:}.'.format(step, len(train_dataloader), elapsed))
 
-            # Tell pytorch not to bother with constructing the compute graph 
-            with torch.no_grad():        
+                # Unpack this training batch from our dataloader. 
+                b_input_ids,b_input_mask,b_labels = batch['ids'].to(device),batch['mask'].to(device),batch['tags'].to(device)
 
-                # Forward pass, calculate logit predictions.
+                # Always clear any previously calculated gradients before performing a backward pass.
+                model.zero_grad()        
+
+                # Perform a forward pass (evaluate the model on this training batch).
                 logits = model(b_input_ids,b_input_mask)
                 loss = loss_fn(logits.view(-1,model.num_labels), b_labels.view(-1))  
 
-            # Accumulate the validation loss.
-            total_eval_loss += loss.item()
+                # Perform a backward pass to calculate the gradients.
+                loss.backward()
 
-            # Compute training accuracy
-            flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
-            active_logits = logits.view(-1, model.num_labels) # shape (batch_size * seq_len, num_labels)
-            flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size * seq_len,)
-            active_accuracy = b_labels.view(-1) != -100 # shape (batch_size * seq_len)
-            labels = torch.masked_select(flattened_targets, active_accuracy)
-            predictions = torch.masked_select(flattened_predictions, active_accuracy)
+                # Accumulate the training loss over all of the batches 
+                total_train_loss += loss.item()
+                
+                # Clip the norm of the gradients to 1.0 (prevent the "exploding gradients" problem)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
 
-            # Calculate the accuracy for this batch of test sentences
-            total_eval_accuracy += accuracy_score(labels.cpu().numpy(), predictions.cpu().numpy())
+                # Update parameters and take a step using the computed gradient.
+                optimizer.step()
 
-        # Report the final accuracy for this validation run.
-        avg_val_accuracy = total_eval_accuracy/len(dev_dataloader)
-        print("  Accuracy: {0:.2f}".format(avg_val_accuracy))
+            # Calculate the average loss over all of the batches.
+            avg_train_loss = total_train_loss/len(train_dataloader)
+            print("\n  Average training loss: {0:.2f}".format(avg_train_loss))
 
-        # Calculate the average loss over all of the batches.
-        avg_val_loss = total_eval_loss/len(dev_dataloader)
-        print("  Validation Loss: {0:.2f}".format(avg_val_loss))
-        
-        # Measure how long the validation run took.
-        validation_time = format_time(time.time() - t0)
-        print("  Validation took: {:}".format(validation_time))
+            # Measure how long this epoch took.
+            training_time = format_time(time.time() - t0)
+            print("  Training epoch took: {:}".format(training_time))
+                
+            # ========================================
+            #               Validation
+            # ========================================
+            # After the completion of each training epoch, measure our performance on our validation set.
 
-        # Save model in the point with best validation loss
-        if avg_val_loss < best_val_loss:
-            best_val_loss = avg_val_loss
-            print("Saving the model with val loss = ","{:.2f}".format(best_val_loss))
-            torch.save(model.state_dict(),new_dir+str(experiment)+'.pt')
+            print("")
+            print("Running Validation...")
 
-        # Record all statistics from this epoch.
-        training_stats.append(
-            {
-                'epoch': epoch_i + 1,
-                'Training Loss': avg_train_loss,
-                'Valid. Loss': avg_val_loss,
-                'Valid. Accur.': avg_val_accuracy,
-                'Training Time': training_time,
-                'Validation Time': validation_time
-            }
-        )
+            t0 = time.time()
 
-    print("\nTraining complete!")
-    print("Total training took {:} (h:mm:ss)".format(format_time(time.time()-total_t0)))
+            # Put the model in evaluation mode--the dropout layers behave differently during evaluation.
+            model.eval()
 
-    ### Save Load Stats from all epochs
+            # Tracking variables 
+            total_eval_accuracy = 0
+            total_eval_loss = 0
+            nb_eval_steps = 0
 
-    # Save stats
-    with open(new_dir+'train_stats_'+str(experiment)+'.txt', 'a') as f:
-        f.write(str(training_stats)+"\n")
-        f.close()
+            # Evaluate data for one epoch
+            for step, batch in enumerate(dev_dataloader):
 
-    all_training_stats, my_lists = [], []
-    with open(new_dir+'train_stats_'+str(experiment)+'.txt', 'r') as f: 
-        for li in f.readlines():
-            my_lists.append(ast.literal_eval(li))
-        f.close()
+                # Unpack this training batch from our dataloader. 
+                b_input_ids,b_input_mask,b_labels = batch['ids'].to(device),batch['mask'].to(device),batch['tags'].to(device)
 
-    # Add training stats of all epochs
-    for i,my_list in enumerate(my_lists):
-        if i == 0:  
-            for elem in my_list:
-                all_training_stats.append(elem)
-        else: 
-            for elem in my_list:
-                elem['epoch'] = len(all_training_stats)+1
-                all_training_stats.append(elem)
+                # Tell pytorch not to bother with constructing the compute graph 
+                with torch.no_grad():        
 
-    # Save stats
-    with open(new_dir+'train_stats_'+str(experiment)+'.txt', 'w') as f:
-        f.write(str(all_training_stats)+"\n")
-        f.close()
+                    # Forward pass, calculate logit predictions.
+                    logits = model(b_input_ids,b_input_mask)
+                    loss = loss_fn(logits.view(-1,model.num_labels), b_labels.view(-1))  
 
-    ### Training Stats
-    pd.set_option('precision', 2)
-    df_stats = pd.DataFrame(data=all_training_stats)
-    df_stats = df_stats.set_index('epoch')
-    print(df_stats)
+                # Accumulate the validation loss.
+                total_eval_loss += loss.item()
+
+                # Compute training accuracy
+                flattened_targets = b_labels.view(-1) # shape (batch_size * seq_len,)
+                active_logits = logits.view(-1, model.num_labels) # shape (batch_size * seq_len, num_labels)
+                flattened_predictions = torch.argmax(active_logits, axis=1) # shape (batch_size * seq_len,)
+                active_accuracy = b_labels.view(-1) != -100 # shape (batch_size * seq_len)
+                labels = torch.masked_select(flattened_targets, active_accuracy)
+                predictions = torch.masked_select(flattened_predictions, active_accuracy)
+
+                # Calculate the accuracy for this batch of test sentences
+                total_eval_accuracy += accuracy_score(labels.cpu().numpy(), predictions.cpu().numpy())
+
+            # Report the final accuracy for this validation run.
+            avg_val_accuracy = total_eval_accuracy/len(dev_dataloader)
+            print("  Accuracy: {0:.2f}".format(avg_val_accuracy))
+
+            # Calculate the average loss over all of the batches.
+            avg_val_loss = total_eval_loss/len(dev_dataloader)
+            print("  Validation Loss: {0:.2f}".format(avg_val_loss))
+            
+            # Measure how long the validation run took.
+            validation_time = format_time(time.time() - t0)
+            print("  Validation took: {:}".format(validation_time))
+
+            # Save model in the point with best validation loss
+            if avg_val_loss < best_val_loss:
+                best_val_loss = avg_val_loss
+                print("Saving the model with val loss = ","{:.2f}".format(best_val_loss))
+                torch.save(model.state_dict(),new_dir+str(experiment)+'.pt')
+
+            # Record all statistics from this epoch.
+            training_stats.append(
+                {
+                    'epoch': epoch_i + 1,
+                    'Training Loss': avg_train_loss,
+                    'Valid. Loss': avg_val_loss,
+                    'Valid. Accur.': avg_val_accuracy,
+                    'Training Time': training_time,
+                    'Validation Time': validation_time
+                }
+            )
+
+        print("\nTraining complete!")
+        print("Total training took {:} (h:mm:ss)".format(format_time(time.time()-total_t0)))
+
+        ### Save Load Stats from all epochs
+
+        # Save stats
+        with open(new_dir+'train_stats_'+str(experiment)+'.txt', 'a') as f:
+            f.write(str(training_stats)+"\n")
+            f.close()
+
+        all_training_stats, my_lists = [], []
+        with open(new_dir+'train_stats_'+str(experiment)+'.txt', 'r') as f: 
+            for li in f.readlines():
+                my_lists.append(ast.literal_eval(li))
+            f.close()
+
+        # Add training stats of all epochs
+        for i,my_list in enumerate(my_lists):
+            if i == 0:  
+                for elem in my_list:
+                    all_training_stats.append(elem)
+            else: 
+                for elem in my_list:
+                    elem['epoch'] = len(all_training_stats)+1
+                    all_training_stats.append(elem)
+
+        # Save stats
+        with open(new_dir+'train_stats_'+str(experiment)+'.txt', 'w') as f:
+            f.write(str(all_training_stats)+"\n")
+            f.close()
+
+        ### Training Stats
+        pd.set_option('precision', 2)
+        df_stats = pd.DataFrame(data=all_training_stats)
+        df_stats = df_stats.set_index('epoch')
+        print(df_stats)
 
     ### Test Model
     t0 = time.time()
@@ -519,7 +524,7 @@ def main():
     print(rec)
 
     ### Create Report
-    with open(new_dir+'report'+str(experiment)+'.txt', 'w') as f:
+    with open(new_dir+'report'+str(report_exp)+'.txt', 'w') as f:
         f.write("Model:"+MODEL+"\n")
         f.write("Learning Rate:"+str(learning_rate)+"\n")
         f.write("Batch Size:"+str(batch_size)+"\n")
