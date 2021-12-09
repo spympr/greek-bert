@@ -132,9 +132,9 @@ def main():
     os.mkdir(new_dir)
 
     ### Retrieve Data
-    train_df = pd.read_csv('../Raptarchis/train2.csv')
-    dev_df   = pd.read_csv('../Raptarchis/dev2.csv')
-    test_df  = pd.read_csv('../Raptarchis/test2.csv')
+    train_df = pd.read_csv('../Raptarchis/train.csv')
+    dev_df   = pd.read_csv('../Raptarchis/dev.csv')
+    test_df  = pd.read_csv('../Raptarchis/test.csv')
 
     # ### No of Labels in each Set
     # if category == 'volume':
